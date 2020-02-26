@@ -60,6 +60,11 @@ namespace DataLayer
             };
             return foo;
         }
+
+        public string printDataLayer()
+        {
+            return "DataLayer connected!";
+        }
     }
 }
 
