@@ -15,6 +15,7 @@
 ### Demo
 Please see the demo project for how to call and use our dll.
 Also, the dll is generated from **DatabaseProviderClass.cs** file which provides source code.
+<img width="978" alt="截圖 2020-02-25 下午9 23 10" src="https://user-images.githubusercontent.com/31400661/75311787-1bab7380-5815-11ea-97a2-30650d218f4d.png">
 
 ### Design
 Currently, **THREE** APIs are provided for accessing database (mocking data for now).
