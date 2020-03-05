@@ -121,7 +121,7 @@ public class DataBaseManager
 
     public string[] getCommandsSize(int id)
     {
-        dataReader = ExecuteQuery("SELECT count(step) FROM Commands WHERE ID = " + id + ";");
+        dataReader = ExecuteQuery("SELECT count(Step) FROM Commands WHERE ID = " + id + ";");
         string[] res = new string[0];
         if (dataReader.Read())
         {
@@ -134,8 +134,9 @@ public class DataBaseManager
     }
     public string[] getCommandByID(int id)
     {
-        dataReader = ExecuteQuery("SELECT step,Command FROM Commands WHERE ID = " + id + ";");
         string[] res = getCommandsSize(id);
+        dataReader = ExecuteQuery("SELECT Step,Command FROM Commands WHERE ID = " + id + ";");
+        //Debug.Log(dataReader.Read());
         while (dataReader.HasRows)
         {
             if (dataReader.Read())
@@ -153,7 +154,7 @@ public class DataBaseManager
     {
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
-        //Debug.Log(queryString);
+        Debug.Log(queryString);
         dataReader = dbCommand.ExecuteReader();
         return dataReader;
     }

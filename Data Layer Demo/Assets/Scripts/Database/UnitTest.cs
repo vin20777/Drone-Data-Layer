@@ -66,7 +66,7 @@ public class UnitTest : MonoBehaviour
     }
     void TestCommand()
     {
-        string[] unit = dbm.getCommandsSize(1);
+        string[] unit = dbm.getCommandByID(1);
         for (int i = 0; i < unit.GetLength(0); i++)
         {
             Debug.Log("index: " + i + " command: " + unit[i]);
