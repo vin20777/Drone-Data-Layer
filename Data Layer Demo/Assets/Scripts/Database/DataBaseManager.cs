@@ -10,46 +10,28 @@ using Mono.Data.Sqlite;
 /// 
 /// Author: Jiayan Wang
 /// </summary>
-public class DataBaseManager : MonoBehaviour
+public class DataBaseManager
 {
     private SqliteConnection dbConnection;
     private SqliteCommand dbCommand;
     private SqliteDataReader dataReader;
-    //Singleton pattern
-    private static DataBaseManager instance;
-    public static DataBaseManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = GameObject.Find("DatabaseManager").GetComponent<DataBaseManager>();
-            }
-            return instance;
-        }
-    }
 
     /// <summary>
     /// connect to the database
     /// </summary>
-    void Awake()
+    public void ConnectToDB(string filename)
     {
-        string filePath = Application.streamingAssetsPath + "/Rover.db";
+        string filePath = Application.streamingAssetsPath + "/" + filename;
         try
         {
             dbConnection = new SqliteConnection("Data Source = " + filePath);
             dbConnection.Open();
-            Debug.Log("success to connect");
+            Debug.Log("success to connect " + filename);
         }
         catch (System.Exception e)
         {
             Debug.Log(e.Message);
         }
-    }
-
-    void Start()
-    {
-        DontDestroyOnLoad(this);
     }
 
     public enum MAZE_OBJECT
@@ -104,12 +86,12 @@ public class DataBaseManager : MonoBehaviour
     public int[,] getPathByID(int id)
     {
         int[,] res = getPathSize(id);
-        dataReader = ExecuteQuery("SELECT Step, X , Y FROM Maze WHERE SolutionID = " + id + ";");
+        dataReader = ExecuteQuery("SELECT Step, X , Y FROM Path WHERE SolutionID = " + id + ";");
         while (dataReader.HasRows)
         {
             if (dataReader.Read())
             {
-                int step = dataReader.GetInt32(0);
+                int step = dataReader.GetInt32(0)-1;
                 int x = dataReader.GetInt32(1);
                 int y = dataReader.GetInt32(2);
                 res[step, 0] = x;
@@ -136,19 +118,34 @@ public class DataBaseManager : MonoBehaviour
     #endregion
 
     #region command_list
-    public List<string> getCommands()
+
+    public string[] getCommandsSize(int id)
     {
-        List<string> commands = new List<string>();
+        dataReader = ExecuteQuery("SELECT count(step) FROM Commands WHERE ID = " + id + ";");
+        string[] res = new string[0];
+        if (dataReader.Read())
+        {
+            int size = dataReader.GetInt32(0);
+            res = new string[size];
+        }
+
+        return res;
+
+    }
+    public string[] getCommandByID(int id)
+    {
+        dataReader = ExecuteQuery("SELECT step,Command FROM Commands WHERE ID = " + id + ";");
+        string[] res = getCommandsSize(id);
         while (dataReader.HasRows)
         {
             if (dataReader.Read())
             {
-                string command = dataReader.GetString(0);
-                commands.Add(command);
+                int index = dataReader.GetInt32(0) - 1 ;
+                res[index] = dataReader.GetString(1);
             }
         }
 
-        return commands;
+        return res;
     }
     #endregion
 
@@ -156,7 +153,7 @@ public class DataBaseManager : MonoBehaviour
     {
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
-        Debug.Log(queryString);
+        //Debug.Log(queryString);
         dataReader = dbCommand.ExecuteReader();
         return dataReader;
     }
