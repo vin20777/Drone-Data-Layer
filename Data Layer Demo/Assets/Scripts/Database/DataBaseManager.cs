@@ -69,6 +69,27 @@ public class DataBaseManager
 
         return res;
     }
+
+    public MAZE_OBJECT getObjectByPosition(int x, int y,int id)
+    {
+
+        int[,] res = getMazeSize(id);
+        dataReader = ExecuteQuery("SELECT Value FROM Maze WHERE ID = " + id + " And X ="+x+" And Y = "+y+";");
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                int val = dataReader.GetInt32(2);
+            }
+        }
+
+        if (val == MAZE_OBJECT.Road)
+            return MAZE_OBJECT.Road;
+        else if (val == MAZE_OBJECT.Start)
+            return MAZE_OBJECT.Start;
+        else if (val == MAZE_OBJECT.Wall)
+            return MAZE_OBJECT.Wall;
+    }
     #endregion
 
     #region path
