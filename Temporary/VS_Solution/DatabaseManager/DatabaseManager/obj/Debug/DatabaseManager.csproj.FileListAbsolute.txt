@@ -1,0 +1,15 @@
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\DatabaseManager.dll.config
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\DatabaseManager.dll
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\DatabaseManager.pdb
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\EntityFramework.dll
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\EntityFramework.SqlServer.dll
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\System.Data.SQLite.dll
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\System.Data.SQLite.EF6.dll
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\System.Data.SQLite.Linq.dll
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\EntityFramework.xml
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\EntityFramework.SqlServer.xml
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\System.Data.SQLite.xml
+D:\C# Workspace\DatabaseManager\DatabaseManager\bin\Debug\System.Data.SQLite.dll.config
+D:\C# Workspace\DatabaseManager\DatabaseManager\obj\Debug\DatabaseManager.csproj.CopyComplete
+D:\C# Workspace\DatabaseManager\DatabaseManager\obj\Debug\DatabaseManager.dll
+D:\C# Workspace\DatabaseManager\DatabaseManager\obj\Debug\DatabaseManager.pdb
