@@ -1,4 +1,5 @@
-﻿using Mono.Data.Sqlite;
+﻿using System.Collections.Generic;
+using Mono.Data.Sqlite;
 using UnityEngine;
 
 /// <summary>
@@ -39,6 +40,10 @@ public class DataLayerAPI
      * Team may use: Algorithm
      * Definition: Pass an unique id and the maze to store.
      */
+    public void setMapStructure(int id, int[][] maze)
+    {
+
+    }
 
     /* Second API: Get Map Structure.
      * Parameters: int id, 
@@ -46,6 +51,50 @@ public class DataLayerAPI
      * Team may use: Algorithm, UI, Experimental Design
      * Definition: Retrieve the map information with id.
      */
+    public Dictionary<string, object> getMapStructure(int id)
+    {
+        int[,] maze = getMazeSize(id);
+        dataReader = ExecuteQuery("SELECT X,Y,Value FROM Maze WHERE ID = " + id + ";");
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                int x = dataReader.GetInt32(0);
+                int y = dataReader.GetInt32(1);
+                int val = dataReader.GetInt32(2);
+                maze[x, y] = val;
+            }
+        }
+        Dictionary<string, object> result = new Dictionary<string, object>();
+        result.Add("description", generateDescription());
+        result.Add("maze", maze);
+        return result;
+    }
+
+    private Dictionary<int, string> generateDescription()
+    {
+        Dictionary<int, string> description = new Dictionary<int, string>();
+        description.Add((int)MAZE_OBJECT.OpenArea, "OpenArea");
+        description.Add((int)MAZE_OBJECT.Wall, "Wall");
+        description.Add((int)MAZE_OBJECT.Starting, "Starting");
+        description.Add((int)MAZE_OBJECT.Ending, "Ending");
+        description.Add((int)MAZE_OBJECT.Path, "Path");
+
+        return description;
+    }
+
+    private int[,] getMazeSize(int id)
+    {
+        dataReader = ExecuteQuery("SELECT max(X),max(Y) FROM Maze WHERE ID = " + id + ";");
+        int x = 0;
+        int y = 0;
+        if (dataReader.Read())
+        {
+            x = dataReader.GetInt32(0) + 1;
+            y = dataReader.GetInt32(1) + 1;
+        }
+        return new int[x, y];
+    }
 
     /* Third API: Set Path Record.
      * Parameters: int id, int mazeId, int[][] path, int[] velocity
@@ -53,6 +102,10 @@ public class DataLayerAPI
      * Team may use: Algorithm
      * Definition: Record the path for mazes.
      */
+    public void setPathRecord(int id, int mazeId, int[][] path, int[] velocity)
+    {
+
+    }
 
     /* Fourth API: Get Path Record.
      * Parameters: int id
@@ -60,6 +113,37 @@ public class DataLayerAPI
      * Team may use: UI
      * Definition: Retrieve stored path record.
      */
+    public Dictionary<string, object> getPathRecord(int id)
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>();
+        int[,] res = getPathSize(id);
+        dataReader = ExecuteQuery("SELECT Step, X , Y FROM Path WHERE ID = " + id + ";");
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                int step = dataReader.GetInt32(0) - 1;
+                int x = dataReader.GetInt32(1);
+                int y = dataReader.GetInt32(2);
+                res[step, 0] = x;
+                res[step, 1] = y;
+            }
+        }
+        result.Add("path", res);
+        result.Add("solutionId", 7);
+        return result;
+    }
+
+    private int[,] getPathSize(int id)
+    {
+        dataReader = ExecuteQuery("SELECT count(Step) FROM Path WHERE SolutionID = " + id + ";");
+        int step = 0;
+        if (dataReader.Read())
+        {
+            step = dataReader.GetInt32(0);
+        }
+        return new int[step, 2];
+    }
 
     /* Fifth API: Set Commands List.
      * Parameters: int id, int mazeId, string[] commands, bool isRobot
@@ -67,6 +151,10 @@ public class DataLayerAPI
      * Team may use: Experimental Design
      * Definition: Record the commands either from AI or the user.
      */
+    public void setCommandsList(int id, int mazeId, string[] commands, bool isRobot)
+    {
+
+    }
 
     /* Sixth API: Get Commands List.
      * Parameters: int id
@@ -74,6 +162,34 @@ public class DataLayerAPI
      * Team may use: UI
      * Definition: Retrieve the commands for analysis.
      */
+    public Dictionary<string, object> getCommandsList(int id)
+    {
+        Dictionary<string, object> result = new Dictionary<string, object>();
+        string[] res = getCommandsSize(id);
+        dataReader = ExecuteQuery("SELECT Step,Command FROM Commands WHERE ID = " + id + ";");
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                int index = dataReader.GetInt32(0) - 1;
+                res[index] = dataReader.GetString(1);
+            }
+        }
+        result.Add("commands", res);
+        return result;
+    }
+
+    private string[] getCommandsSize(int id)
+    {
+        dataReader = ExecuteQuery("SELECT count(Step) FROM Commands WHERE ID = " + id + ";");
+        string[] res = new string[0];
+        if (dataReader.Read())
+        {
+            int size = dataReader.GetInt32(0);
+            res = new string[size];
+        }
+        return res;
+    }
 
     /* Seventh API: Set Sensor Configuration.
      * Parameters: <UNKNOWN>
@@ -88,4 +204,36 @@ public class DataLayerAPI
      * Team may use: Sensors
      * Definition:
      */
+
+
+    /* General database functions. */
+    public SqliteDataReader ExecuteQuery(string queryString)
+    {
+        dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = queryString;
+        Debug.Log(queryString);
+        dataReader = dbCommand.ExecuteReader();
+        return dataReader;
+    }
+
+    public void CloseConnection()
+    {
+        if (dbCommand != null)
+        {
+            dbCommand.Cancel();
+        }
+        dbCommand = null;
+
+        if (dataReader != null)
+        {
+            dataReader.Close();
+        }
+        dataReader = null;
+
+        if (dbConnection != null)
+        {
+            dbConnection.Close();
+        }
+        dbConnection = null;
+    }
 }
