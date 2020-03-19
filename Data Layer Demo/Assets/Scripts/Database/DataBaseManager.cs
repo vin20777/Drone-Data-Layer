@@ -75,20 +75,23 @@ public class DataBaseManager
 
         int[,] res = getMazeSize(id);
         dataReader = ExecuteQuery("SELECT Value FROM Maze WHERE ID = " + id + " And X ="+x+" And Y = "+y+";");
+        int val = -2;
         while (dataReader.HasRows)
         {
             if (dataReader.Read())
             {
-                int val = dataReader.GetInt32(2);
+                val = dataReader.GetInt32(2);
             }
         }
 
-        if (val == MAZE_OBJECT.Road)
+        if (val == 1)
             return MAZE_OBJECT.Road;
-        else if (val == MAZE_OBJECT.Start)
+        else if (val == 0)
             return MAZE_OBJECT.Start;
-        else if (val == MAZE_OBJECT.Wall)
+        else if (val == -1)
             return MAZE_OBJECT.Wall;
+
+        return MAZE_OBJECT.Wall;
     }
     #endregion
 
@@ -171,7 +174,7 @@ public class DataBaseManager
     }
     #endregion
 
-    public SqliteDataReader ExecuteQuery(string queryString)
+    private SqliteDataReader ExecuteQuery(string queryString)
     {
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
