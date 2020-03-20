@@ -36,8 +36,8 @@ public class DataBaseManager
 
     public enum MAZE_OBJECT
     {
-        //Wall = -1, Start = 0, Road = 1
-        OPenArea=0, Wall=1, Start =2, End = 3, Path =4, Robot =5;
+        Wall = -1, Start = 0, Road = 1
+        //OPenArea=0, Wall=1, Start =2, End = 3, Path =4, Robot =5;
     }
     #region maze
     public int[,] getMazeSize(int id)
