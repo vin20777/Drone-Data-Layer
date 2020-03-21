@@ -34,7 +34,8 @@ public class DataLayerAPI
         }
     }
 
-    /* First API: Set Map Structure.
+    /*
+     * First API: Set Map Structure.
      * Parameters: int id, int[][] maze
      * Return Type: void
      * Team may use: Algorithm
@@ -45,7 +46,8 @@ public class DataLayerAPI
 
     }
 
-    /* Second API: Get Map Structure.
+    /**
+     * Second API: Get Map Structure.
      * Parameters: int id, 
      * Return Type: Dictionary<String, object>
      * Team may use: Algorithm, UI, Experimental Design
