@@ -1,15 +1,17 @@
 ﻿/// <summary>
 /// This is the encapsulation for Database.
-/// 
+///
 /// Author: Bingrui Feng
 /// </summary>
-namespace Assets.Scripts.Database
-{
-    public static class Constants
-    {
-        public enum MAZE_OBJECT
-        {
-            OpenArea = 0, Wall = 1, Starting = 2, Ending = 3, Path = 4, Robot = 5
+namespace Assets.Scripts.Database {
+    public static class Constants {
+        public enum MAZE_OBJECT {
+            OpenArea = 0,
+            Wall = 1,
+            Starting = 2,
+            Ending = 3,
+            Path = 4,
+            Robot = 5
         }
 
         public static readonly int RESPONSE_CODE_SUCCESS = 1;
