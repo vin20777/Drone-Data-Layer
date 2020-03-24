@@ -6,11 +6,10 @@ using Assets.Scripts.Database;
 
 /// <summary>
 /// This is database manager class that can access the database.
-/// 
+///
 /// Author: Jiayan Wang, Bingrui Feng, Xinkai Wang
 /// </summary>
-public class DataBaseManager
-{
+public class DataBaseManager {
     private SqliteConnection dbConnection;
     private SqliteCommand dbCommand;
     private SqliteDataReader dataReader;
@@ -18,17 +17,13 @@ public class DataBaseManager
     /// <summary>
     /// Connect to the database.
     /// </summary>
-    public void ConnectToDB(string filename)
-    {
+    public void ConnectToDB(string filename) {
         string filePath = Application.streamingAssetsPath + "/" + filename;
-        try
-        {
+        try {
             dbConnection = new SqliteConnection("Data Source = " + filePath);
             dbConnection.Open();
             Debug.Log("success to connect " + filename);
-        }
-        catch (System.Exception e)
-        {
+        } catch (System.Exception e) {
             Debug.Log(e.Message);
         }
     }
@@ -38,8 +33,7 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public string[][] GetMazeById(int id)
-    {
+    public string[][] GetMazeById(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add(Constants.COLUMN_NODE);
@@ -50,12 +44,16 @@ public class DataBaseManager
         condition.Add(Constants.COLUMN_ID, id.ToString());
 
         List<string[]> res = new List<string[]>();
-        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
-                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+        dataReader = ExecuteQuery(
+            sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows) {
+            if (dataReader.Read()) {
+                res.Add(new string[3]{dataReader [Constants.COLUMN_NODE]
+                                          .ToString(),
+                                      dataReader [Constants.COLUMN_CONNECTTO]
+                                          .ToString(),
+                                      dataReader [Constants.COLUMN_DIRECTION]
+                                          .ToString()});
             }
         }
         return res.ToArray();
@@ -70,9 +68,8 @@ public class DataBaseManager
     /// </summary>
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
-    public int InsertMazeRecord(int id, int[] nodes, string[,] edges)
-    {
-        // sample data: 
+    public int InsertMazeRecord(int id, int[] nodes, string[, ] edges) {
+        // sample data:
         // nodes = new int [4] {1, 2, 3, 4};
         // edges = new int [4, 3]{
         // {'1','2','E'}, {'1','4','N'}, {'2','3','W'}, {'3','4','S'}
@@ -81,8 +78,7 @@ public class DataBaseManager
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
 
-        if (errorCheckMaze(id, nodes, edges))
-        {
+        if (errorCheckMaze(id, nodes, edges)) {
             result = Constants.RESPONSE_CODE_FAILURE;
             return result;
         }
@@ -90,16 +86,14 @@ public class DataBaseManager
         List<string> columnName = new List<string>();
         List<string> value = new List<string>();
 
-        try
-        {
+        try {
             columnName.Add(Constants.COLUMN_ID);
             columnName.Add(Constants.COLUMN_NODE);
             columnName.Add(Constants.COLUMN_CONNECTTO);
             columnName.Add(Constants.COLUMN_DIRECTION);
             columnName.Add(Constants.COLUMN_DESCRIPTION);
 
-            for (int i = 0; i < edges.GetLength(0); i++)
-            {
+            for (int i = 0; i < edges.GetLength(0); i++) {
                 value.Clear();
                 value.Add(id.ToString());
                 value.Add(edges[i, 0]);
@@ -108,12 +102,11 @@ public class DataBaseManager
                 value.Add("'Description'");
 
                 dbCommand = dbConnection.CreateCommand();
-                dbCommand.CommandText = sql.Insert(Constants.TABLE_MAZE, columnName, value);
+                dbCommand.CommandText =
+                    sql.Insert(Constants.TABLE_MAZE, columnName, value);
                 dbCommand.ExecuteNonQuery();
             }
-        }
-        catch (SqliteException sqlEx)
-        {
+        } catch (SqliteException sqlEx) {
             result = Constants.RESPONSE_CODE_FAILURE;
             Debug.LogError(sqlEx);
         }
@@ -125,29 +118,26 @@ public class DataBaseManager
     /// </summary>
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
-    public int UpdateMazeDirection(int id, string[] edges)
-    {
+    public int UpdateMazeDirection(int id, string[] edges) {
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
 
         Dictionary<string, string> setValue = new Dictionary<string, string>();
         setValue.Add(Constants.COLUMN_NODE, edges[0]);
         setValue.Add(Constants.COLUMN_CONNECTTO, edges[1]);
-        setValue.Add(Constants.COLUMN_DIRECTION, "'"+edges[2]+"'");
+        setValue.Add(Constants.COLUMN_DIRECTION, "'" + edges[2] + "'");
 
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add(Constants.COLUMN_ID, id.ToString());
         condition.Add(Constants.COLUMN_NODE, edges[0]);
         condition.Add(Constants.COLUMN_CONNECTTO, edges[1]);
 
-        try
-        {
+        try {
             dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = sql.Update(Constants.TABLE_MAZE, setValue, condition);
+            dbCommand.CommandText =
+                sql.Update(Constants.TABLE_MAZE, setValue, condition);
             dbCommand.ExecuteNonQuery();
-        }
-        catch (SqliteException sqlEx)
-        {
+        } catch (SqliteException sqlEx) {
             result = Constants.RESPONSE_CODE_FAILURE;
             Debug.LogError(sqlEx);
         }
@@ -160,22 +150,18 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public int DeleteMazeById(int id)
-    {
+    public int DeleteMazeById(int id) {
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
 
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add(Constants.COLUMN_ID, id.ToString());
 
-        try
-        {
+        try {
             dbCommand = dbConnection.CreateCommand();
             dbCommand.CommandText = sql.Delete(Constants.TABLE_MAZE, condition);
             dbCommand.ExecuteNonQuery();
-        }
-        catch (SqliteException sqlEx)
-        {
+        } catch (SqliteException sqlEx) {
             result = Constants.RESPONSE_CODE_FAILURE;
             Debug.LogError(sqlEx);
         }
@@ -183,14 +169,13 @@ public class DataBaseManager
         return result;
     }
 
-    #region UNDONE Work
+#region UNDONE Work
     /// <summary>
     /// return the maze according to id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public int[,] getMazeByID(int id)
-    {
+    public int[, ] getMazeByID(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("X");
@@ -200,12 +185,11 @@ public class DataBaseManager
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
 
-        int[,] res = getMazeSize(id);
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
+        int[, ] res = getMazeSize(id);
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        while (dataReader.HasRows) {
+            if (dataReader.Read()) {
                 int x = dataReader.GetInt32(0);
                 int y = dataReader.GetInt32(1);
                 int val = dataReader.GetInt32(2);
@@ -223,21 +207,19 @@ public class DataBaseManager
     /// <param name="id"></param>
     /// <returns></returns>
 
-    //public MAZE_OBJECT getObjectByPosition(int x, int y,int id)
+    // public MAZE_OBJECT getObjectByPosition(int x, int y,int id)
     //{
     //    SqlEncap sql = new SqlEncap();
     //    List<string> selectvalue = new List<string>();
     //    selectvalue.Add("Value");
     //    string tableName = "Maze";
-    //    Dictionary<string, string> condition = new Dictionary<string, string>();
-    //    condition.Add("ID", id.ToString());
-    //    condition.Add("X", x.ToString());
-    //    condition.Add("Y", y.ToString());
+    //    Dictionary<string, string> condition = new Dictionary<string,
+    //    string>(); condition.Add("ID", id.ToString()); condition.Add("X",
+    //    x.ToString()); condition.Add("Y", y.ToString());
 
     //    int[,] res = getMazeSize(id);
-    //    dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-    //    int val = -2;
-    //    while (dataReader.HasRows)
+    //    dataReader = ExecuteQuery(sql.Select(selectvalue, tableName,
+    //    condition)); int val = -2; while (dataReader.HasRows)
     //    {
     //        if (dataReader.Read())
     //        {
@@ -260,8 +242,7 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public int[,] getPathSize(int id)
-    {
+    public int[, ] getPathSize(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("count(Step)");
@@ -269,10 +250,10 @@ public class DataBaseManager
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("SolutionID", id.ToString());
 
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         int step = 0;
-        if (dataReader.Read())
-        {
+        if (dataReader.Read()) {
             step = dataReader.GetInt32(0);
         }
         return new int[step, 2];
@@ -282,8 +263,7 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public int[,] getPathByID(int id)
-    {
+    public int[, ] getPathByID(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("Step");
@@ -293,12 +273,11 @@ public class DataBaseManager
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("SolutionID", id.ToString());
 
-        int[,] res = getPathSize(id);
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
+        int[, ] res = getPathSize(id);
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        while (dataReader.HasRows) {
+            if (dataReader.Read()) {
                 int step = dataReader.GetInt32(0) - 1;
                 int x = dataReader.GetInt32(1);
                 int y = dataReader.GetInt32(2);
@@ -315,8 +294,7 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public string getSensorByID(int id)
-    {
+    public string getSensorByID(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("Comment");
@@ -324,10 +302,10 @@ public class DataBaseManager
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
 
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string res = "";
-        if (dataReader.Read())
-        {
+        if (dataReader.Read()) {
             res = dataReader.GetString(0);
         }
 
@@ -339,8 +317,7 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public string[] getCommandsSize(int id)
-    {
+    public string[] getCommandsSize(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("count(Step)");
@@ -348,10 +325,10 @@ public class DataBaseManager
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
 
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string[] res = new string[0];
-        if (dataReader.Read())
-        {
+        if (dataReader.Read()) {
             int size = dataReader.GetInt32(0);
             res = new string[size];
         }
@@ -363,8 +340,7 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public string[] getCommandByID(int id)
-    {
+    public string[] getCommandByID(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("Step");
@@ -374,12 +350,11 @@ public class DataBaseManager
         condition.Add("ID", id.ToString());
 
         string[] res = getCommandsSize(id);
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        //Debug.Log(dataReader.Read());
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        // Debug.Log(dataReader.Read());
+        while (dataReader.HasRows) {
+            if (dataReader.Read()) {
                 int index = dataReader.GetInt32(0) - 1;
                 res[index] = dataReader.GetString(1);
             }
@@ -391,64 +366,49 @@ public class DataBaseManager
      * New requirement from algorithm team
      */
 
-   public int CreateSession(string sessionType, string algorithmType, int x, int y)
-   {
+    public int CreateSession(string sessionType, string algorithmType, int x,
+                             int y) {
         return 0;
-   }
+    }
 
-    public bool UpdateCell(int sessionId, int x, int y, int value)
-    {
+    public bool UpdateCell(int sessionId, int x, int y, int value) {
         return true;
     }
 
-    public string GetCell(int sessionId, int x, int y)
-    {
-        return string.Empty;
-    }
+    public string GetCell(int sessionId, int x, int y) { return string.Empty; }
 
-    public string[, ] GetMaze(int sessionId)
-    {
-        return new string[1, 1];
-    }
+    public string[, ] GetMaze(int sessionId) { return new string[1, 1]; }
 
-    public void AddCommand(int sessionId, string command)
-    {
-
-    }
-    #endregion
+    public void AddCommand(int sessionId, string command) {}
+#endregion
 
     /// <summary>
     /// close the connection with the database
     /// </summary>
-    public void CloseConnection()
-    {
-        if (dbCommand != null)
-        {
+    public void CloseConnection() {
+        if (dbCommand != null) {
             dbCommand.Cancel();
         }
         dbCommand = null;
 
-        if (dataReader != null)
-        {
+        if (dataReader != null) {
             dataReader.Close();
         }
         dataReader = null;
 
-        if (dbConnection != null)
-        {
+        if (dbConnection != null) {
             dbConnection.Close();
         }
         dbConnection = null;
     }
 
-    #region private functions
+#region private functions
     /// <summary>
     /// Execute SQL sentences.
     /// </summary>
     /// <param name="queryString"></param>
     /// <returns></returns>
-    private SqliteDataReader ExecuteQuery(string queryString)
-    {
+    private SqliteDataReader ExecuteQuery(string queryString) {
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
         Debug.Log(queryString);
@@ -461,8 +421,7 @@ public class DataBaseManager
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    private int[,] getMazeSize(int id)
-    {
+    private int[, ] getMazeSize(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("max(X)");
@@ -471,19 +430,19 @@ public class DataBaseManager
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
 
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         int x = 0;
         int y = 0;
-        if (dataReader.Read())
-        {
+        if (dataReader.Read()) {
             x = dataReader.GetInt32(0) + 1;
             y = dataReader.GetInt32(1) + 1;
         }
         return new int[x, y];
     }
-    #endregion
+#endregion
 
-    #region error check
+#region error check
 
     /// <summary>
     /// Check all input data for insert or update maze table
@@ -492,15 +451,14 @@ public class DataBaseManager
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
     /// <returns></returns>
-    private bool errorCheckMaze(int id, int[] nodes, string[,] edges)
-    {
-        if (id < 0)                                      //Check ID
+    private bool errorCheckMaze(int id, int[] nodes, string[, ] edges) {
+        if (id < 0) // Check ID
             return true;
-        
-        for(int i = 0; i < nodes.Length; i++)            //Check nodes
+
+        for (int i = 0; i < nodes.Length; i++) // Check nodes
         {
             if (nodes[i] < 0)
-                return true;                     
+                return true;
         }
 
         List<string> directionList = new List<string>();
@@ -509,19 +467,18 @@ public class DataBaseManager
         directionList.Add("W");
         directionList.Add("E");
 
-        for(int i = 0; i < edges.GetLength(0); i++)
-        {
+        for (int i = 0; i < edges.GetLength(0); i++) {
             if (edges.GetLength(1) > 3)
                 return true;
-            else if (System.Convert.ToInt32(edges[i, 0]) < 0 || System.Convert.ToInt32(edges[i, 1]) < 0)
+            else if (System.Convert.ToInt32(edges[i, 0]) < 0 ||
+                     System.Convert.ToInt32(edges[i, 1]) < 0)
                 return true;
-            else if (! directionList.Contains(edges[i, 2]))
+            else if (!directionList.Contains(edges[i, 2]))
                 return true;
         }
-
 
         return false;
     }
 
-    #endregion
+#endregion
 }
