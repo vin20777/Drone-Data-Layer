@@ -33,12 +33,19 @@ public class DataBaseManager
             Debug.Log(e.Message);
         }
     }
-
+    /// <summary>
+    /// define the MAZE_OBJECT
+    /// </summary>
     public enum MAZE_OBJECT
     {
         Wall = -1, Start = 0, Road = 1
         //OPenArea=0, Wall=1, Start =2, End = 3, Path =4, Robot =5;
     }
+    /// <summary>
+    /// return the size of the maze according to id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     #region maze
     public int[,] getMazeSize(int id)
     {
@@ -52,7 +59,11 @@ public class DataBaseManager
         }
         return new int[x, y];
     }
-
+    /// <summary>
+    /// return the maze according to id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public int[,] getMazeByID(int id)
     {
         int[,] res = getMazeSize(id);
@@ -70,6 +81,13 @@ public class DataBaseManager
 
         return res;
     }
+    /// <summary>
+    /// return the type of the object in maze according to coordinates
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
 
     public MAZE_OBJECT getObjectByPosition(int x, int y,int id)
     {
@@ -95,7 +113,11 @@ public class DataBaseManager
         return MAZE_OBJECT.Wall;
     }
     #endregion
-
+    /// <summary>
+    ///  return the number of the steps according to id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     #region path
     public int[,] getPathSize(int id)
     {
@@ -107,7 +129,11 @@ public class DataBaseManager
         }
         return new int[step, 2];
     }
-
+    /// <summary>
+    /// return the sepecific path according to id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public int[,] getPathByID(int id)
     {
         int[,] res = getPathSize(id);
@@ -127,7 +153,11 @@ public class DataBaseManager
         return res;
     }
     #endregion
-
+    /// <summary>
+    /// return the sensor according to id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     #region sensor
     public string getSensorByID(int id)
     {
@@ -141,7 +171,11 @@ public class DataBaseManager
         return res;
     }
     #endregion
-
+    /// <summary>
+    /// return the size of the commands list
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     #region command_list
 
     public string[] getCommandsSize(int id)
@@ -157,6 +191,11 @@ public class DataBaseManager
         return res;
 
     }
+    /// <summary>
+    /// return the sepecific Command according to id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public string[] getCommandByID(int id)
     {
         string[] res = getCommandsSize(id);
@@ -174,7 +213,11 @@ public class DataBaseManager
         return res;
     }
     #endregion
-
+    /// <summary>
+    /// return the data from the database
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <returns></returns>
     private SqliteDataReader ExecuteQuery(string queryString)
     {
         dbCommand = dbConnection.CreateCommand();
@@ -183,7 +226,9 @@ public class DataBaseManager
         dataReader = dbCommand.ExecuteReader();
         return dataReader;
     }
-
+    /// <summary>
+    /// close the connection with the database
+    /// </summary>
     public void CloseConnection()
     {
         if (dbCommand != null)

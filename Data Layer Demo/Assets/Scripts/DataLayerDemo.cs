@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using DataLayer;
 using System;
-
+/// <summary>
+/// This Demo is used to show the functionality of the DataBaseManager , Please run the demo in Unity and see console for details.
+/// </summary>
 public class DataLayerDemo : MonoBehaviour
 {
     DatabaseProviderClass dpc;
