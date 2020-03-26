@@ -53,6 +53,12 @@ public class DataBaseManager
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
 
+        if (errorCheckMaze(id, nodes, edges))
+        {
+            result = Constants.RESPONSE_CODE_FAILURE;
+            return result;
+        }
+
         List<string> columnName = new List<string>();
         List<string> value = new List<string>();
 
@@ -393,5 +399,47 @@ public class DataBaseManager
         }
         return new int[x, y];
     }
+    #endregion
+
+    #region error check
+
+    /// <summary>
+    /// Check all input data for insert or update maze table
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="nodes"></param>
+    /// <param name="edges"></param>
+    /// <returns></returns>
+    private bool errorCheckMaze(int id, int[] nodes, string[,] edges)
+    {
+        if (id < 0)                                      //Check ID
+            return true;
+        
+        for(int i = 0; i < nodes.Length; i++)            //Check nodes
+        {
+            if (nodes[i] < 0)
+                return true;                     
+        }
+
+        List<string> directionList = new List<string>();
+        directionList.Add("N");
+        directionList.Add("S");
+        directionList.Add("W");
+        directionList.Add("E");
+
+        for(int i = 0; i < edges.Length; i++)
+        {
+            if (edges.Length > 3)
+                return true;
+            else if (System.Convert.ToInt32(edges[i, 0]) < 0 || System.Convert.ToInt32(edges[i, 1]) < 0)
+                return true;
+            else if (! directionList.Contains(edges[i, 2]))
+                return true;
+        }
+
+
+        return false;
+    }
+
     #endregion
 }
