@@ -1,102 +1,55 @@
-﻿using Assets.Scripts.Database;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using Assets.Scripts.Database;
 using UnityEngine;
 
+/// <summary>
+/// This Demo is used to show the functionality of the DataBaseManager,
+/// Please run the demo in Unity and see console for details.
+/// 
+/// Author: Bingrui Feng, Xinkai Wang, Jiayan Wang,
+/// Yu-Ting Tsao, Huijing Liang, Meng-Ze Chen
+/// </summary>
 public class UnitTest : MonoBehaviour
 {
-    // Start is called before the first frame update
     private DataBaseManager dbm;
+    private int mazeUid;
+
     void Start()
     {
         dbm = new DataBaseManager();
         dbm.ConnectToDB("Rover.db");
-        //TestInsertMaze();
-        TestDeleteMazeById();
-        //TestMazeSize();
-        //TestMaze();
-        //TestPathsize();
-        //TestPath();
-        //TestSensor();
-        //TestCommandSize();
-        //TestCommand();
+        TestInsertMaze();
+        //TestDeleteMazeById();
     }
 
-    /// <summary>
-    /// This method is used to test insert record into maze table
-    /// </summary>
     void TestInsertMaze()
     {
-        int[] nodes = new int [4] {1, 2, 3, 4};
-        string[,] edges = new string [4, 3]{
-         {"1","3", "S"}, {"2", "3", "N"}, {"2", "4", "W"}, {"3", "4", "E"}
+        int[] nodes = new int [4] { 1, 2, 3, 4 };
+        string[,] edges = new string [4, 3]
+        {
+            {"1", "3", "S"},
+            {"2", "3", "N"},
+            {"2", "4", "W"},
+            {"3", "4", "E"}
         };
-
-        int resultCode = dbm.InsertMazeRecord(1, nodes, edges);
-        Debug.Log("The result code is:" + (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Failure": "Success"));
+        mazeUid = provideUid();
+        int resultCode = dbm.InsertMazeRecord(mazeUid, nodes, edges);
+        Debug.Log("Insert Maze Result:" +
+            (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success" : "Failure"));
     }
 
-    /// <summary>
-    /// This method is used to test insert record into maze table
-    /// </summary>
     void TestDeleteMazeById()
     {
-        int resultCode = dbm.DeleteMazeById(1);
-        Debug.Log("The result code is:" + (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Failure" : "Success" + "For DeleteMazeById"));
+        int resultCode = dbm.DeleteMazeById(mazeUid);
+        Debug.Log("Delete Maze Result:" +
+            (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success" : "Failure"));
     }
 
-    void TestMazeSize()
+    private int provideUid()
     {
-        int[,] unit = dbm.getMazeSize(1);
-        Debug.Log("total number of elements in Maze" + unit.Length);
-        Debug.Log("row: " + unit.GetLength(0));
-        Debug.Log("col: " + unit.GetLength(1));
-    }
-
-    void TestMaze()
-    {
-        int[,] unit = dbm.getMazeByID(1);
-        for (int x = 0; x<unit.GetLength(0);x++) 
-        {
-            for (int y = 0; y < unit.GetLength(1); y++)
-            {
-                Debug.Log("x: " + x + " y: " + y + " val: " + unit[x, y]);
-            }
-        }
-    }
-
-    void TestPathsize()
-    {
-        int[,] unit = dbm.getPathSize(1);
-        Debug.Log("total steps in Path" + unit.GetLength(0));
-    }
-
-    void TestPath()
-    {
-        Debug.Log("print path");
-        int[,] unit = dbm.getPathByID(1);
-        for (int x = 0; x < unit.GetLength(0); x++)
-        {
-            Debug.Log("x: " + unit[x,0] + " y: " + unit[x,1]);
-        }
-    }
-
-    void TestSensor()
-    {
-        Debug.Log("sensor: "+ dbm.getSensorByID(1));
-    }
-
-    void TestCommandSize()
-    {
-        Debug.Log("command size: "+ dbm.getCommandsSize(1).GetLength(0));
-    }
-    void TestCommand()
-    {
-        string[] unit = dbm.getCommandByID(1);
-        for (int i = 0; i < unit.GetLength(0); i++)
-        {
-            Debug.Log("index: " + i + " command: " + unit[i]);
-        }
-       
+        var now = DateTime.Now;
+        var zeroDate = DateTime.MinValue.AddHours(now.Hour).AddMinutes(now.Minute).AddSeconds(now.Second).AddMilliseconds(now.Millisecond);
+        int uniqueId = (int)(zeroDate.Ticks / 10000);
+        return uniqueId;
     }
 }
