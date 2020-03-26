@@ -20,7 +20,8 @@ public class UnitTest : MonoBehaviour
         dbm.ConnectToDB("Rover.db");
         TestInsertMaze();
         TestUpdateMaze();
-        //TestDeleteMazeById();
+        TestGetMazeById();
+        TestDeleteMazeById();
     }
 
     void TestInsertMaze()
@@ -33,7 +34,7 @@ public class UnitTest : MonoBehaviour
             {"2", "4", "W"},
             {"3", "4", "E"}
         };
-        mazeUid = 1;//provideUid();
+        mazeUid = provideUid();
         int resultCode = dbm.InsertMazeRecord(mazeUid, nodes, edges);
         Debug.Log("Insert Maze Result:" +
             (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success" : "Failure"));
@@ -41,11 +42,30 @@ public class UnitTest : MonoBehaviour
 
     void TestUpdateMaze()
     {
-        int Id = 1;
         string[] edges = new string[3] {"1", "3", "E"};
-        int resultCode = dbm.UpdateMazeDirection(Id, edges);
+        int resultCode = dbm.UpdateMazeDirection(mazeUid, edges);
         Debug.Log("Update Maze Result:" +
             (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success" : "Failure"));
+    }
+
+    void TestGetMazeById()
+    {
+        var arr = dbm.GetMazeById(1);
+
+        int rowLength = arr.GetLength(0);
+        int colLength = arr[0].Length;
+
+        Debug.Log("Get Maze Result:");
+
+        for (int i = 0; i < rowLength; i++)
+        {
+            string str = String.Empty;
+            for (int j = 0; j < colLength; j++)
+            {
+                str += arr[i][j] + " ";
+            }
+            Debug.Log(str);
+        }     
     }
 
     void TestDeleteMazeById()
