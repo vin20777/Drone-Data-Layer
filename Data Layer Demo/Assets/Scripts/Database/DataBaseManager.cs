@@ -509,9 +509,9 @@ public class DataBaseManager
         directionList.Add("W");
         directionList.Add("E");
 
-        for(int i = 0; i < edges.Length; i++)
+        for(int i = 0; i < edges.GetLength(0); i++)
         {
-            if (edges.Length > 3)
+            if (edges.GetLength(1) > 3)
                 return true;
             else if (System.Convert.ToInt32(edges[i, 0]) < 0 || System.Convert.ToInt32(edges[i, 1]) < 0)
                 return true;
