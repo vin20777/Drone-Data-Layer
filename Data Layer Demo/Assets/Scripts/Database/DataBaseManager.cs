@@ -5,11 +5,12 @@ using System.IO;
 using UnityEngine;
 using Mono.Data.Sqlite;
 using Sql;
+using Assets.Scripts.Database;
 
 /// <summary>
 /// This is database manager class that can access the database.
 /// 
-/// Author: Jiayan Wang
+/// Author: Jiayan Wang, Bingrui Feng, Xinkai Wang
 /// </summary>
 public class DataBaseManager
 {
@@ -34,14 +35,7 @@ public class DataBaseManager
             Debug.Log(e.Message);
         }
     }
-    /// <summary>
-    /// define the MAZE_OBJECT
-    /// </summary>
-    public enum MAZE_OBJECT
-    {
-        Wall = -1, Start = 0, Road = 1
-        //OPenArea=0, Wall=1, Start =2, End = 3, Path =4, Robot =5;
-    }
+
     /// <summary>
     /// return the size of the maze according to id
     /// </summary>
@@ -99,6 +93,59 @@ public class DataBaseManager
 
         return res;
     }
+
+
+    /// <summary>
+    /// This method is to insert received map data into maze table
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="maze"></param>
+    public int InsertMazeRecord(int id, int[] nodes, string[,] edges)
+    {
+        // sample data: 
+        // nodes = new int [4] {1, 2, 3, 4};
+        // edges = new int [4, 3]{
+        // {'1','2','E'}, {'1','4','N'}, {'2','3','W'}, {'3','4','S'}
+        //};
+
+        SqlEncap sql = new SqlEncap();
+        int result = Constants.RESPONSE_CODE_SUCCESS;
+
+        List<string> columnName = new List<string>();
+        List<string> value = new List<string>();
+
+        try
+        {
+            columnName.Add(Constants.COLUMN_ID);
+            columnName.Add(Constants.COLUMN_NODE);
+            columnName.Add(Constants.COLUMN_CONNECTTO);
+            columnName.Add(Constants.COLUMN_DIRECTION);
+            columnName.Add(Constants.COLUMN_DESCRIPTION);
+
+            for (int i = 0; i < edges.GetLength(0); i++)
+            {
+                value.Clear();
+                value.Add(id.ToString());
+                value.Add(edges[i, 0]);
+                value.Add(edges[i, 1]);
+                value.Add("'"+edges[i, 2]+"'");
+                value.Add("'Description'");
+
+                dbCommand = dbConnection.CreateCommand();
+                dbCommand.CommandText = sql.Insert(Constants.TABLE_MAZE, columnName, value);
+                dbCommand.ExecuteNonQuery();
+            }
+        }
+        catch (SqliteException sqlEx)
+        {
+            result = Constants.RESPONSE_CODE_FAILURE;
+            Debug.LogError(sqlEx);
+        }
+  
+        return result;
+    }
+
+
     /// <summary>
     /// return the type of the object in maze according to coordinates
     /// </summary>
@@ -107,37 +154,37 @@ public class DataBaseManager
     /// <param name="id"></param>
     /// <returns></returns>
 
-    public MAZE_OBJECT getObjectByPosition(int x, int y,int id)
-    {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("Value");
-        string tableName = "Maze";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
-        condition.Add("X", x.ToString());
-        condition.Add("Y", y.ToString());
+    //public MAZE_OBJECT getObjectByPosition(int x, int y,int id)
+    //{
+    //    SqlEncap sql = new SqlEncap();
+    //    List<string> selectvalue = new List<string>();
+    //    selectvalue.Add("Value");
+    //    string tableName = "Maze";
+    //    Dictionary<string, string> condition = new Dictionary<string, string>();
+    //    condition.Add("ID", id.ToString());
+    //    condition.Add("X", x.ToString());
+    //    condition.Add("Y", y.ToString());
 
-        int[,] res = getMazeSize(id);
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        int val = -2;
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
-                val = dataReader.GetInt32(2);
-            }
-        }
+    //    int[,] res = getMazeSize(id);
+    //    dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+    //    int val = -2;
+    //    while (dataReader.HasRows)
+    //    {
+    //        if (dataReader.Read())
+    //        {
+    //            val = dataReader.GetInt32(2);
+    //        }
+    //    }
 
-        if (val == 1)
-            return MAZE_OBJECT.Road;
-        else if (val == 0)
-            return MAZE_OBJECT.Start;
-        else if (val == -1)
-            return MAZE_OBJECT.Wall;
+    //    if (val == 1)
+    //        return Constants.MAZE_OBJECT.;
+    //    else if (val == 0)
+    //        return MAZE_OBJECT.Start;
+    //    else if (val == -1)
+    //        return MAZE_OBJECT.Wall;
 
-        return MAZE_OBJECT.Wall;
-    }
+    //    return MAZE_OBJECT.Wall;
+    //}
     #endregion
     /// <summary>
     ///  return the number of the steps according to id
