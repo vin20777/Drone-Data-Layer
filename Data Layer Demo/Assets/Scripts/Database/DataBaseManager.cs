@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using UnityEngine;
 using Mono.Data.Sqlite;
+using Sql;
 
 /// <summary>
 /// This is database manager class that can access the database.
@@ -49,7 +50,15 @@ public class DataBaseManager
     #region maze
     public int[,] getMazeSize(int id)
     {
-        dataReader = ExecuteQuery("SELECT max(X),max(Y) FROM Maze WHERE ID = " + id + ";");
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("max(X)");
+        selectvalue.Add("max(Y)");
+        string tableName = "Maze";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         int x = 0;
         int y = 0;
         if (dataReader.Read())
@@ -66,8 +75,17 @@ public class DataBaseManager
     /// <returns></returns>
     public int[,] getMazeByID(int id)
     {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("X");
+        selectvalue.Add("Y");
+        selectvalue.Add("Value");
+        string tableName = "Maze";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+
         int[,] res = getMazeSize(id);
-        dataReader = ExecuteQuery("SELECT X,Y,Value FROM Maze WHERE ID = " + id + ";");
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         while (dataReader.HasRows)
         {
             if (dataReader.Read())
@@ -91,9 +109,17 @@ public class DataBaseManager
 
     public MAZE_OBJECT getObjectByPosition(int x, int y,int id)
     {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("Value");
+        string tableName = "Maze";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+        condition.Add("X", x.ToString());
+        condition.Add("Y", y.ToString());
 
         int[,] res = getMazeSize(id);
-        dataReader = ExecuteQuery("SELECT Value FROM Maze WHERE ID = " + id + " And X ="+x+" And Y = "+y+";");
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         int val = -2;
         while (dataReader.HasRows)
         {
@@ -121,7 +147,14 @@ public class DataBaseManager
     #region path
     public int[,] getPathSize(int id)
     {
-        dataReader = ExecuteQuery("SELECT count(Step) FROM Path WHERE SolutionID = " + id + ";");
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("count(Step)");
+        string tableName = "Path";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("SolutionID", id.ToString());
+
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         int step = 0;
         if (dataReader.Read())
         {
@@ -136,8 +169,17 @@ public class DataBaseManager
     /// <returns></returns>
     public int[,] getPathByID(int id)
     {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("Step");
+        selectvalue.Add("X");
+        selectvalue.Add("Y");
+        string tableName = "Path";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("SolutionID", id.ToString());
+
         int[,] res = getPathSize(id);
-        dataReader = ExecuteQuery("SELECT Step, X , Y FROM Path WHERE SolutionID = " + id + ";");
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         while (dataReader.HasRows)
         {
             if (dataReader.Read())
@@ -161,7 +203,14 @@ public class DataBaseManager
     #region sensor
     public string getSensorByID(int id)
     {
-        dataReader = ExecuteQuery("SELECT Comment FROM Sensor WHERE ID = " + id + ";");
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("Comment");
+        string tableName = "Sensor";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string res = "";
         if (dataReader.Read())
         {
@@ -180,7 +229,14 @@ public class DataBaseManager
 
     public string[] getCommandsSize(int id)
     {
-        dataReader = ExecuteQuery("SELECT count(Step) FROM Commands WHERE ID = " + id + ";");
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("count(Step)");
+        string tableName = "Commands";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string[] res = new string[0];
         if (dataReader.Read())
         {
@@ -198,8 +254,16 @@ public class DataBaseManager
     /// <returns></returns>
     public string[] getCommandByID(int id)
     {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("Step");
+        selectvalue.Add("Command");
+        string tableName = "Commands";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+
         string[] res = getCommandsSize(id);
-        dataReader = ExecuteQuery("SELECT Step,Command FROM Commands WHERE ID = " + id + ";");
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         //Debug.Log(dataReader.Read());
         while (dataReader.HasRows)
         {
