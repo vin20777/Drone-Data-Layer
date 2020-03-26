@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sql;
 
+/// <summary>
+/// This is the unit test for Sql.dll.
+/// 
+/// Author: Xinkai Wang
+/// </summary>
+
 namespace Sql_UnitTest
 {
     [TestClass]
@@ -59,7 +65,7 @@ namespace Sql_UnitTest
             value.Add("2");
             value.Add("'maze no.1'");
 
-            Assert.AreEqual("INSERT INTO Maze (X,Y,Z) VALUE (1,2,'maze no.1');", sql.Insert(tableName, columnName, value));
+            Assert.AreEqual("INSERT INTO Maze (X,Y,Z) VALUES (1,2,'maze no.1');", sql.Insert(tableName, columnName, value));
         }
 
         [TestMethod]

@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// This is the encapsulation for SQL.
+/// 
+/// Author: Xinkai Wang
+/// </summary>
+
 namespace Sql
 {
     public class SqlEncap
@@ -17,6 +23,9 @@ namespace Sql
         /// <returns></returns>
         public string Select(List<string>selectValue, string tableName, Dictionary<string,string>condition)
         {
+            if (selectValue.Count <= 0 || tableName == null)
+                return "error";
+
             string result = "";
 
             result = "SELECT ";
@@ -60,6 +69,9 @@ namespace Sql
         /// <returns></returns>
         public string Delete(string tableName, Dictionary<string, string> condition)
         {
+            if (tableName == null)
+                return "error";
+
             string result = "";
 
             result = "DELETE FROM ";
@@ -93,6 +105,15 @@ namespace Sql
         /// <returns></returns>
         public string Insert(string tableName, List<string> columName, List<string> value)
         {
+            if (tableName == null)
+                return "error";
+
+            if(columName.Count() > 0)
+            {
+                if (columName.Count() != value.Count())
+                    return "error";
+            }
+
             string result = "";
 
             result = "INSERT INTO ";
@@ -145,6 +166,9 @@ namespace Sql
         /// <returns></returns>
         public string Update(string tableName, Dictionary<string,string> setValue, Dictionary<string,string> condition)
         {
+            if (tableName == null || setValue.Count() <= 0)
+                return "error";
+
             string result = "";
 
             result = "UPDATE ";
@@ -182,6 +206,12 @@ namespace Sql
 
             return result;
         }
+
+        #region error check
+
+        
+
+        #endregion
 
     }
 }
