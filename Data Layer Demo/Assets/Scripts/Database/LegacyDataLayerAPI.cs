@@ -53,7 +53,7 @@ public class LegacyDataLayerAPI
     /// <param name="maze"></param>
     public void setMapStructure(int id, int[,] maze)
     {
-        mapDB.Add(id, maze);
+        //mapDB.Add(id, maze);
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class LegacyDataLayerAPI
         }
         Dictionary<string, object> result = new Dictionary<string, object>();
         result.Add("description", generateDescription());
-        result.Add("maze", mapDB[id]);
+        //result.Add("maze", mapDB[id]);
         return result;
     }
 
