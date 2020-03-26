@@ -8,7 +8,14 @@ namespace Sql
 {
     public class SqlEncap
     {
-        public string Select(List<string>selectValue, string tableNme, Dictionary<string,string>condition)
+        /// <summary>
+        /// Return sql string for select value from one table
+        /// </summary>
+        /// <param name="selectValue">The value you want select</param>
+        /// <param name="tableNme">The table where you select from</param>
+        /// <param name="condition">Additional selection criteria</param>
+        /// <returns></returns>
+        public string Select(List<string>selectValue, string tableName, Dictionary<string,string>condition)
         {
             string result = "";
 
@@ -24,7 +31,7 @@ namespace Sql
                 result += selectValue[i];
             }
 
-            result += " FROM " + tableNme;
+            result += " FROM " + tableName;
 
             for(int i = 0; i < condition.Count(); i++)
             {
@@ -45,12 +52,18 @@ namespace Sql
             return result;
         }
 
-        public string Delete(string tableNme, Dictionary<string, string> condition)
+        /// <summary>
+        /// Return sql string for delete value from one table
+        /// </summary>
+        /// <param name="tableName">The table you delete value from</param>
+        /// <param name="condition">Additional selection criteria</param>
+        /// <returns></returns>
+        public string Delete(string tableName, Dictionary<string, string> condition)
         {
             string result = "";
 
             result = "DELETE ";
-            result += tableNme;
+            result += tableName;
 
             for (int i = 0; i < condition.Count(); i++)
             {
@@ -71,12 +84,19 @@ namespace Sql
             return result;
         }
 
-        public string Insert(string tableNme, List<string> columName, List<string> value)
+        /// <summary>
+        /// Return sql string for insert a new row in table
+        /// </summary>
+        /// <param name="tableName">The table you want to insert</param>
+        /// <param name="columName">The column name in the table</param>
+        /// <param name="value">The value of each column</param>
+        /// <returns></returns>
+        public string Insert(string tableName, List<string> columName, List<string> value)
         {
             string result = "";
 
             result = "INSERT INTO ";
-            result += tableNme;
+            result += tableName;
 
             if(columName.Count() != 0)
             {
@@ -116,12 +136,19 @@ namespace Sql
             return result;
         }
 
-        public string Update(string tableNme, Dictionary<string,string> setValue, Dictionary<string,string> condition)
+        /// <summary>
+        /// Return sql string to update some value in a table
+        /// </summary>
+        /// <param name="tableName">The table you want update</param>
+        /// <param name="setValue">The column name and value which you want update</param>
+        /// <param name="condition">Additional selection criteria</param>
+        /// <returns></returns>
+        public string Update(string tableName, Dictionary<string,string> setValue, Dictionary<string,string> condition)
         {
             string result = "";
 
             result = "UPDATE ";
-            result += tableNme;
+            result += tableName;
 
             for (int i = 0; i < setValue.Count(); i++)
             {
