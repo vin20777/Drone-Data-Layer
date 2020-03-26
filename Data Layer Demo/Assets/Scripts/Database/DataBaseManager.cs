@@ -34,6 +34,34 @@ public class DataBaseManager
     }
 
     /// <summary>
+    /// This method is to get back maze record by Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public string[][] GetMazeById(int id)
+    {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add(Constants.COLUMN_NODE);
+        selectvalue.Add(Constants.COLUMN_CONNECTTO);
+        selectvalue.Add(Constants.COLUMN_DIRECTION);
+
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add(Constants.COLUMN_ID, id.ToString());
+
+        List<string[]> res = new List<string[]>();
+        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+            }
+        }
+        return res.ToArray();
+    }
+
+    /// <summary>
     /// First API: Insert Maze Record.
     /// Parameters: int id, int[] nodes, string[,] edges
     /// Return Type: int (Success or Failure)
@@ -93,12 +121,37 @@ public class DataBaseManager
     }
 
     /// <summary>
-    /// This method is to update existing map data in maze table.
+    /// This method is to update existing map direction in maze table.
     /// </summary>
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
-    public int UpdateMazeRecord(int id, int[] nodes, string[,] edges)
+    public int UpdateMazeDirection(int id, string[] edges)
     {
+        SqlEncap sql = new SqlEncap();
+        int result = Constants.RESPONSE_CODE_SUCCESS;
+
+        Dictionary<string, string> setValue = new Dictionary<string, string>();
+        setValue.Add(Constants.COLUMN_NODE, edges[0]);
+        setValue.Add(Constants.COLUMN_CONNECTTO, edges[1]);
+        setValue.Add(Constants.COLUMN_DIRECTION, "'"+edges[2]+"'");
+
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add(Constants.COLUMN_ID, id.ToString());
+        condition.Add(Constants.COLUMN_NODE, edges[0]);
+        condition.Add(Constants.COLUMN_CONNECTTO, edges[1]);
+
+        try
+        {
+            dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = sql.Update(Constants.TABLE_MAZE, setValue, condition);
+            dbCommand.ExecuteNonQuery();
+        }
+        catch (SqliteException sqlEx)
+        {
+            result = Constants.RESPONSE_CODE_FAILURE;
+            Debug.LogError(sqlEx);
+        }
+
         return Constants.RESPONSE_CODE_SUCCESS;
     }
 
@@ -332,6 +385,35 @@ public class DataBaseManager
             }
         }
         return res;
+    }
+
+    /*
+     * New requirement from algorithm team
+     */
+
+   public int CreateSession(string sessionType, string algorithmType, int x, int y)
+   {
+        return 0;
+   }
+
+    public bool UpdateCell(int sessionId, int x, int y, int value)
+    {
+        return true;
+    }
+
+    public string GetCell(int sessionId, int x, int y)
+    {
+        return string.Empty;
+    }
+
+    public string[, ] GetMaze(int sessionId)
+    {
+        return new string[1, 1];
+    }
+
+    public void AddCommand(int sessionId, string command)
+    {
+
     }
     #endregion
 
