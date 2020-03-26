@@ -334,4 +334,26 @@ public class LegacyDataLayerAPI
             }
 
         }
+
+        public SQLiteDataReader GetDataReader(string sql)
+        {
+
+            SQLiteConnection conn = GetSqlconnection();
+            try
+            {
+                conn.Open();
+                SQLiteCommand cmd = new SQLiteCommand();
+                return cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+
+        }
 }
