@@ -117,7 +117,7 @@ namespace Sql
                 result += ")";
             }
 
-            result += " VALUE (";
+            result += " VALUES (";
 
             for(int i = 0; i < value.Count(); i++)
             {

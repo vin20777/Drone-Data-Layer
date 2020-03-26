@@ -24,5 +24,11 @@ namespace Assets.Scripts.Database
         public static readonly string TABLE_SIMULATIONTYPE = "SimulationType";
         public static readonly string TABLE_SENSOR = "Sensor";
         public static readonly string TABLE_ALGORITHMTYPE = "AlgorithmType";
+
+        public static readonly string COLUMN_ID = "Id";
+        public static readonly string COLUMN_NODE = "Node";
+        public static readonly string COLUMN_CONNECTTO = "ConnectTo";
+        public static readonly string COLUMN_DIRECTION = "Direction";
+        public static readonly string COLUMN_DESCRIPTION = "Description";
     }
 }

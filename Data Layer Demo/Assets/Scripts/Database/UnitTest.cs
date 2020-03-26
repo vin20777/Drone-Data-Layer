@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Database;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,13 +11,27 @@ public class UnitTest : MonoBehaviour
     {
         dbm = new DataBaseManager();
         dbm.ConnectToDB("Rover.db");
-        TestMazeSize();
-        TestMaze();
-        TestPathsize();
-        TestPath();
-        TestSensor();
-        TestCommandSize();
-        TestCommand();
+        TestInsertMaze();
+        //TestMazeSize();
+        //TestMaze();
+        //TestPathsize();
+        //TestPath();
+        //TestSensor();
+        //TestCommandSize();
+        //TestCommand();
+    }
+    /// <summary>
+    /// This method is used to test insert record into maze table
+    /// </summary>
+    void TestInsertMaze()
+    {
+        int[] nodes = new int [4] {1, 2, 3, 4};
+        string[,] edges = new string [4, 3]{
+         {"1","3", "S"}, {"2", "3", "N"}, {"2", "4", "W"}, {"3", "4", "E"}
+        };
+
+        int resultCode = dbm.InsertMazeRecord(1, nodes, edges);
+        Debug.Log("The result code is:" + (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Failure": "Success"));
     }
 
     void TestMazeSize()
