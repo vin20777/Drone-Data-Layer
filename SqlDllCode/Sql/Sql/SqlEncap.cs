@@ -44,5 +44,32 @@ namespace Sql
 
             return result;
         }
+
+        public string Delete(string tableNme, Dictionary<string, string> condition)
+        {
+            string result = "";
+
+            result = "DELETE ";
+            result += tableNme;
+
+            for (int i = 0; i < condition.Count(); i++)
+            {
+                if (i == 0)
+                {
+                    result += " WHERE ";
+                }
+                else
+                {
+                    result += " And ";
+                }
+
+                result += condition.ElementAt(i).Key + " = " + condition.ElementAt(i).Value;
+            }
+
+            result += ";";
+
+            return result;
+        }
+
     }
 }
