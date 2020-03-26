@@ -34,23 +34,29 @@ public class DataLayerAPI
         }
     }
 
-    /* First API: Set Map Structure.
-     * Parameters: int id, int[][] maze
-     * Return Type: void
-     * Team may use: Algorithm
-     * Definition: Pass an unique id and the maze to store.
-     */
+    /// <summary>
+    /// First API: Set Map Structure.
+    /// Parameters: int id, int[][] maze
+    /// Return Type: void
+    /// Team may use: Algorithm
+    /// Definition: Pass an unique id and the maze to store.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="maze"></param>
     public void setMapStructure(int id, int[][] maze)
     {
 
     }
 
-    /* Second API: Get Map Structure.
-     * Parameters: int id, 
-     * Return Type: Dictionary<String, object>
-     * Team may use: Algorithm, UI, Experimental Design
-     * Definition: Retrieve the map information with id.
-     */
+    /// <summary>
+    /// Second API: Get Map Structure.
+    /// Parameters: int id,
+    /// Return Type: Dictionary<String, object>
+    /// Team may use: Algorithm, UI, Experimental Design
+    /// Definition: Retrieve the map information with id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Dictionary<string, object> getMapStructure(int id)
     {
         int[,] maze = getMazeSize(id);
@@ -96,23 +102,31 @@ public class DataLayerAPI
         return new int[x, y];
     }
 
-    /* Third API: Set Path Record.
-     * Parameters: int id, int mazeId, int[][] path, int[] velocity
-     * Return Type: void
-     * Team may use: Algorithm
-     * Definition: Record the path for mazes.
-     */
+  /// <summary>
+  ///  Third API: Set Path Record.
+  ///  Parameters: int id, int mazeId, int[][] path, int[] velocity
+  ///  Return Type: void
+  ///  Team may use: Algorithm
+  ///  Definition: Record the path for mazes.
+  /// </summary>
+  /// <param name="id"></param>
+  /// <param name="mazeId"></param>
+  /// <param name="path"></param>
+  /// <param name="velocity"></param>
     public void setPathRecord(int id, int mazeId, int[][] path, int[] velocity)
     {
 
     }
 
-    /* Fourth API: Get Path Record.
-     * Parameters: int id
-     * Return Type: Dictionary<String, object>
-     * Team may use: UI
-     * Definition: Retrieve stored path record.
-     */
+    /// <summary>
+    /// Fourth API: Get Path Record.
+    /// Parameters: int id
+    /// Return Type: Dictionary<String, object>
+    /// Team may use: UI
+    /// Definition: Retrieve stored path record.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Dictionary<string, object> getPathRecord(int id)
     {
         Dictionary<string, object> result = new Dictionary<string, object>();
@@ -144,24 +158,28 @@ public class DataLayerAPI
         }
         return new int[step, 2];
     }
+    /// <summary>
+    ///  Fifth API: Set Commands List.
+    ///  Parameters: int id, int mazeId, string[] commands, bool isRobot
+    ///  Return Type: Dictionary<String, object>
+    ///  Team may use: Experimental Design
+    ///  Definition: Record the commands either from AI or the user.
+    /// </summary>
 
-    /* Fifth API: Set Commands List.
-     * Parameters: int id, int mazeId, string[] commands, bool isRobot
-     * Return Type: Dictionary<String, object>
-     * Team may use: Experimental Design
-     * Definition: Record the commands either from AI or the user.
-     */
     public void setCommandsList(int id, int mazeId, string[] commands, bool isRobot)
     {
 
     }
 
-    /* Sixth API: Get Commands List.
-     * Parameters: int id
-     * Return Type: Dictionary<String, object>
-     * Team may use: UI
-     * Definition: Retrieve the commands for analysis.
-     */
+    /// <summary>
+    /// Sixth API: Get Commands List.
+    /// Parameters: int id
+    /// Return Type: Dictionary<String, object>
+    /// Team may use: UI
+    /// Definition: Retrieve the commands for analysis.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public Dictionary<string, object> getCommandsList(int id)
     {
         Dictionary<string, object> result = new Dictionary<string, object>();
@@ -191,19 +209,24 @@ public class DataLayerAPI
         return res;
     }
 
-    /* Seventh API: Set Sensor Configuration.
-     * Parameters: <UNKNOWN>
-     * Return Type: <UNKNOWN>
-     * Team may use: Sensors
-     * Definition: 
-     */
+   /// <summary>
+   /// Seventh API: Set Sensor Configuration.
+   /// Parameters: <UNKNOWN>
+   /// Return Type: <UNKNOWN>
+   /// Team may use: Sensors
+   /// Definition: 
+   ///</summary>
+   ///  Eighth API: Get Sensor Configuration.
+   ///  Parameters: <UNKNOWN> 
+   ///  Return Type: <UNKNOWN>
+   ///  Team may use: Sensors
+   ///  Definition:
+   ///</summaryc>
 
-    /* Eighth API: Get Sensor Configuration.
-     * Parameters: <UNKNOWN> 
-     * Return Type: <UNKNOWN>
-     * Team may use: Sensors
-     * Definition:
-     */
+
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <returns></returns>
 
 
     /* General database functions. */
