@@ -11,7 +11,8 @@ public class UnitTest : MonoBehaviour
     {
         dbm = new DataBaseManager();
         dbm.ConnectToDB("Rover.db");
-        TestInsertMaze();
+        //TestInsertMaze();
+        TestDeleteMazeById();
         //TestMazeSize();
         //TestMaze();
         //TestPathsize();
@@ -20,6 +21,7 @@ public class UnitTest : MonoBehaviour
         //TestCommandSize();
         //TestCommand();
     }
+
     /// <summary>
     /// This method is used to test insert record into maze table
     /// </summary>
@@ -32,6 +34,15 @@ public class UnitTest : MonoBehaviour
 
         int resultCode = dbm.InsertMazeRecord(1, nodes, edges);
         Debug.Log("The result code is:" + (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Failure": "Success"));
+    }
+
+    /// <summary>
+    /// This method is used to test insert record into maze table
+    /// </summary>
+    void TestDeleteMazeById()
+    {
+        int resultCode = dbm.DeleteMazeById(1);
+        Debug.Log("The result code is:" + (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Failure" : "Success" + "For DeleteMazeById"));
     }
 
     void TestMazeSize()

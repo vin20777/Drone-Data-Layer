@@ -62,7 +62,7 @@ namespace Sql
         {
             string result = "";
 
-            result = "DELETE ";
+            result = "DELETE FROM ";
             result += tableName;
 
             for (int i = 0; i < condition.Count(); i++)

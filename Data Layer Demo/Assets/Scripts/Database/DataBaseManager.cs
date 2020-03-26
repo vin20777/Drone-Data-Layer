@@ -98,8 +98,8 @@ public class DataBaseManager
     /// <summary>
     /// This method is to insert received map data into maze table
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="maze"></param>
+    /// <param name="nodes"></param>
+    /// <param name="edges"></param>
     public int InsertMazeRecord(int id, int[] nodes, string[,] edges)
     {
         // sample data: 
@@ -145,6 +145,43 @@ public class DataBaseManager
         return result;
     }
 
+    /// <summary>
+    /// This method is to update existing map data in maze table
+    /// </summary>
+    /// <param name="nodes"></param>
+    /// <param name="edges"></param>
+    public int UpdateMazeRecord(int id, int[] nodes, string[,] edges)
+    {
+        return Constants.RESPONSE_CODE_SUCCESS;
+    }
+
+    /// <summary>
+    /// This method is to delete maze record by ID
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public int DeleteMazeById(int id)
+    {
+        SqlEncap sql = new SqlEncap();
+        int result = Constants.RESPONSE_CODE_SUCCESS;
+
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add(Constants.COLUMN_ID, id.ToString());
+     
+        try
+        {
+            dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText = sql.Delete(Constants.TABLE_MAZE, condition);
+            dbCommand.ExecuteNonQuery();           
+        }
+        catch (SqliteException sqlEx)
+        {
+            result = Constants.RESPONSE_CODE_FAILURE;
+            Debug.LogError(sqlEx);
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// return the type of the object in maze according to coordinates

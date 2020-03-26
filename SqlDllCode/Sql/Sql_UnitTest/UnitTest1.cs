@@ -39,7 +39,7 @@ namespace Sql_UnitTest
             condition.Add("Y", "1");
             condition.Add("Z", "2");
 
-            Assert.AreEqual("DELETE Maze WHERE X = 1 And Y = 1 And Z = 2;", sql.Delete(tableName, condition));
+            Assert.AreEqual("DELETE FROM Maze WHERE X = 1 And Y = 1 And Z = 2;", sql.Delete(tableName, condition));
         }
 
         [TestMethod]
