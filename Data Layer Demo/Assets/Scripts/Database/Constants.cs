@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// This is the encapsulation for Database.
 /// 
-/// Author: Xinkai Wang
+/// Author: Bingrui Feng
 /// </summary>
 namespace Assets.Scripts.Database
 {
