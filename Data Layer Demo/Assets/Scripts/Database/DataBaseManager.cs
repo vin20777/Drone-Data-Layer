@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Mono.Data.Sqlite;
 using Sql;
@@ -19,7 +16,7 @@ public class DataBaseManager
     private SqliteDataReader dataReader;
 
     /// <summary>
-    /// connect to the database
+    /// Connect to the database.
     /// </summary>
     public void ConnectToDB(string filename)
     {
@@ -37,66 +34,11 @@ public class DataBaseManager
     }
 
     /// <summary>
-    /// return the size of the maze according to id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    #region maze
-    public int[,] getMazeSize(int id)
-    {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("max(X)");
-        selectvalue.Add("max(Y)");
-        string tableName = "Maze";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
-
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        int x = 0;
-        int y = 0;
-        if (dataReader.Read())
-        {
-            x = dataReader.GetInt32(0)+1;
-            y = dataReader.GetInt32(1)+1;
-        }
-        return new int[x, y];
-    }
-    /// <summary>
-    /// return the maze according to id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public int[,] getMazeByID(int id)
-    {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("X");
-        selectvalue.Add("Y");
-        selectvalue.Add("Value");
-        string tableName = "Maze";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
-
-        int[,] res = getMazeSize(id);
-        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
-                int x = dataReader.GetInt32(0);
-                int y = dataReader.GetInt32(1);
-                int val = dataReader.GetInt32(2);
-                res[x, y] = val;
-            }
-        }
-
-        return res;
-    }
-
-
-    /// <summary>
-    /// This method is to insert received map data into maze table
+    /// First API: Insert Maze Record.
+    /// Parameters: int id, int[] nodes, string[,] edges
+    /// Return Type: int (Success or Failure)
+    /// Team may use: Algorithm
+    /// Definition: Pass an unique id and the maze to store.
     /// </summary>
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
@@ -128,7 +70,7 @@ public class DataBaseManager
                 value.Add(id.ToString());
                 value.Add(edges[i, 0]);
                 value.Add(edges[i, 1]);
-                value.Add("'"+edges[i, 2]+"'");
+                value.Add("'" + edges[i, 2] + "'");
                 value.Add("'Description'");
 
                 dbCommand = dbConnection.CreateCommand();
@@ -141,12 +83,11 @@ public class DataBaseManager
             result = Constants.RESPONSE_CODE_FAILURE;
             Debug.LogError(sqlEx);
         }
-  
         return result;
     }
 
     /// <summary>
-    /// This method is to update existing map data in maze table
+    /// This method is to update existing map data in maze table.
     /// </summary>
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
@@ -167,12 +108,12 @@ public class DataBaseManager
 
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add(Constants.COLUMN_ID, id.ToString());
-     
+
         try
         {
             dbCommand = dbConnection.CreateCommand();
             dbCommand.CommandText = sql.Delete(Constants.TABLE_MAZE, condition);
-            dbCommand.ExecuteNonQuery();           
+            dbCommand.ExecuteNonQuery();
         }
         catch (SqliteException sqlEx)
         {
@@ -181,6 +122,38 @@ public class DataBaseManager
         }
 
         return result;
+    }
+
+    #region UNDONE Work
+    /// <summary>
+    /// return the maze according to id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public int[,] getMazeByID(int id)
+    {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("X");
+        selectvalue.Add("Y");
+        selectvalue.Add("Value");
+        string tableName = Constants.TABLE_MAZE;
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+
+        int[,] res = getMazeSize(id);
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                int x = dataReader.GetInt32(0);
+                int y = dataReader.GetInt32(1);
+                int val = dataReader.GetInt32(2);
+                res[x, y] = val;
+            }
+        }
+        return res;
     }
 
     /// <summary>
@@ -222,13 +195,12 @@ public class DataBaseManager
 
     //    return MAZE_OBJECT.Wall;
     //}
-    #endregion
+
     /// <summary>
     ///  return the number of the steps according to id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    #region path
     public int[,] getPathSize(int id)
     {
         SqlEncap sql = new SqlEncap();
@@ -268,7 +240,7 @@ public class DataBaseManager
         {
             if (dataReader.Read())
             {
-                int step = dataReader.GetInt32(0)-1;
+                int step = dataReader.GetInt32(0) - 1;
                 int x = dataReader.GetInt32(1);
                 int y = dataReader.GetInt32(2);
                 res[step, 0] = x;
@@ -278,13 +250,12 @@ public class DataBaseManager
 
         return res;
     }
-    #endregion
+
     /// <summary>
     /// return the sensor according to id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    #region sensor
     public string getSensorByID(int id)
     {
         SqlEncap sql = new SqlEncap();
@@ -303,14 +274,12 @@ public class DataBaseManager
 
         return res;
     }
-    #endregion
+
     /// <summary>
     /// return the size of the commands list
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    #region command_list
-
     public string[] getCommandsSize(int id)
     {
         SqlEncap sql = new SqlEncap();
@@ -327,10 +296,9 @@ public class DataBaseManager
             int size = dataReader.GetInt32(0);
             res = new string[size];
         }
-
         return res;
-
     }
+
     /// <summary>
     /// return the sepecific Command according to id
     /// </summary>
@@ -353,27 +321,14 @@ public class DataBaseManager
         {
             if (dataReader.Read())
             {
-                int index = dataReader.GetInt32(0) - 1 ;
+                int index = dataReader.GetInt32(0) - 1;
                 res[index] = dataReader.GetString(1);
             }
         }
-
         return res;
     }
     #endregion
-    /// <summary>
-    /// return the data from the database
-    /// </summary>
-    /// <param name="queryString"></param>
-    /// <returns></returns>
-    private SqliteDataReader ExecuteQuery(string queryString)
-    {
-        dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = queryString;
-        Debug.Log(queryString);
-        dataReader = dbCommand.ExecuteReader();
-        return dataReader;
-    }
+
     /// <summary>
     /// close the connection with the database
     /// </summary>
@@ -398,5 +353,45 @@ public class DataBaseManager
         dbConnection = null;
     }
 
-}
+    #region private functions
+    /// <summary>
+    /// Execute SQL sentences.
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <returns></returns>
+    private SqliteDataReader ExecuteQuery(string queryString)
+    {
+        dbCommand = dbConnection.CreateCommand();
+        dbCommand.CommandText = queryString;
+        Debug.Log(queryString);
+        dataReader = dbCommand.ExecuteReader();
+        return dataReader;
+    }
 
+    /// <summary>
+    /// Return the size of the maze according to id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private int[,] getMazeSize(int id)
+    {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add("max(X)");
+        selectvalue.Add("max(Y)");
+        string tableName = "Maze";
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add("ID", id.ToString());
+
+        dataReader = ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        int x = 0;
+        int y = 0;
+        if (dataReader.Read())
+        {
+            x = dataReader.GetInt32(0) + 1;
+            y = dataReader.GetInt32(1) + 1;
+        }
+        return new int[x, y];
+    }
+    #endregion
+}
