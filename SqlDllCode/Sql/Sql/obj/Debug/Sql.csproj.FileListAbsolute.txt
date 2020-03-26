@@ -7,3 +7,8 @@ D:\CLASS\SER 574\teamProject\Drone-Data-Layer\SqlDllCode\Sql\Sql\bin\Debug\Sql.d
 D:\CLASS\SER 574\teamProject\Drone-Data-Layer\SqlDllCode\Sql\Sql\bin\Debug\Sql.pdb
 D:\CLASS\SER 574\teamProject\Drone-Data-Layer\SqlDllCode\Sql\Sql\obj\Debug\Sql.dll
 D:\CLASS\SER 574\teamProject\Drone-Data-Layer\SqlDllCode\Sql\Sql\obj\Debug\Sql.pdb
+D:\New folder\Drone-Data-Layer\SqlDllCode\Sql\Sql\bin\Debug\Sql.dll
+D:\New folder\Drone-Data-Layer\SqlDllCode\Sql\Sql\bin\Debug\Sql.pdb
+D:\New folder\Drone-Data-Layer\SqlDllCode\Sql\Sql\obj\Debug\Sql.csproj.CoreCompileInputs.cache
+D:\New folder\Drone-Data-Layer\SqlDllCode\Sql\Sql\obj\Debug\Sql.dll
+D:\New folder\Drone-Data-Layer\SqlDllCode\Sql\Sql\obj\Debug\Sql.pdb

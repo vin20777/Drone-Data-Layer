@@ -1,25 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mono.Data.Sqlite;
 using UnityEngine;
 
 /// <summary>
-/// This is the main interface class for data layer team.
+/// This is the legacy interface class for data layer team.
 /// 
-/// Author: Jiayan Wang, Xinkai Wang, Yu-Ting Tsao
+/// Author: Yu-Ting Tsao, Huijing Liang
 /// </summary>
 public enum MAZE_OBJECT
 {
     OpenArea = 0, Wall = 1, Starting = 2, Ending = 3, Path = 4
 }
 
-public class DataLayerAPI
+public class LegacyDataLayerAPI
 {
     private readonly string fileName = "Rover.db";
     private SqliteConnection dbConnection;
     private SqliteCommand dbCommand;
     private SqliteDataReader dataReader;
 
-    public DataLayerAPI()
+    //private Dictionary<int, int[,]> mapDB;
+
+    public LegacyDataLayerAPI()
     {
         string filePath = Application.streamingAssetsPath + "/" + fileName;
         try
@@ -34,6 +37,11 @@ public class DataLayerAPI
         }
     }
 
+    internal void setMapStructure(Func<int> provideUid, int[,] sampleMaze)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// First API: Set Map Structure.
     /// Parameters: int id, int[][] maze
@@ -43,9 +51,9 @@ public class DataLayerAPI
     /// </summary>
     /// <param name="id"></param>
     /// <param name="maze"></param>
-    public void setMapStructure(int id, int[][] maze)
+    public void setMapStructure(int id, int[,] maze)
     {
-
+        //mapDB.Add(id, maze);
     }
 
     /// <summary>
@@ -73,7 +81,7 @@ public class DataLayerAPI
         }
         Dictionary<string, object> result = new Dictionary<string, object>();
         result.Add("description", generateDescription());
-        result.Add("maze", maze);
+        //result.Add("maze", mapDB[id]);
         return result;
     }
 
