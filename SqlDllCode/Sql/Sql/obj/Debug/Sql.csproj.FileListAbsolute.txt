@@ -1,0 +1,5 @@
+D:\C# Workspace\Sql\Sql\bin\Debug\Sql.dll
+D:\C# Workspace\Sql\Sql\bin\Debug\Sql.pdb
+D:\C# Workspace\Sql\Sql\obj\Debug\Sql.dll
+D:\C# Workspace\Sql\Sql\obj\Debug\Sql.pdb
+D:\C# Workspace\Sql\Sql\obj\Debug\Sql.csprojAssemblyReference.cache
