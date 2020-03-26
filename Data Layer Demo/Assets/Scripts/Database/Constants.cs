@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿/// <summary>
+/// This is the encapsulation for Database.
+/// 
+/// Author: Xinkai Wang
+/// </summary>
 namespace Assets.Scripts.Database
 {
     public static class Constants
