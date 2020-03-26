@@ -50,7 +50,7 @@ public class UnitTest : MonoBehaviour
 
     void TestGetMazeById()
     {
-        var arr = dbm.GetMazeById(1);
+        var arr = dbm.GetMazeById(mazeUid);
 
         int rowLength = arr.GetLength(0);
         int colLength = arr[0].Length;
