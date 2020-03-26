@@ -20,7 +20,7 @@ public class LegacyDataLayerAPI
     private SqliteCommand dbCommand;
     private SqliteDataReader dataReader;
 
-    private Dictionary<int, int[,]> mapDB;
+    //private Dictionary<int, int[,]> mapDB;
 
     public LegacyDataLayerAPI()
     {
