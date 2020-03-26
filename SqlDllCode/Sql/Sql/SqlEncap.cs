@@ -71,5 +71,50 @@ namespace Sql
             return result;
         }
 
+        public string Insert(string tableNme, List<string> columName, List<string> value)
+        {
+            string result = "";
+
+            result = "INSERT INTO ";
+            result += tableNme;
+
+            if(columName.Count() != 0)
+            {
+                result += " (";
+                {
+                    for(int i = 0; i < columName.Count(); i++)
+                    {
+                        if(i == 0)
+                        {
+                            result += columName[i];
+                        }
+                        else
+                        {
+                            result += "," + columName[i];
+                        }
+                    }
+                }
+                result += ")";
+            }
+
+            result += " VALUE (";
+
+            for(int i = 0; i < value.Count(); i++)
+            {
+                if (i == 0)
+                {
+                    result += value[i];
+                }
+                else
+                {
+                    result += "," + value[i];
+                }
+            }
+
+            result += ");";
+
+            return result;
+        }
+
     }
 }
