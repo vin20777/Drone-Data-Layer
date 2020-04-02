@@ -21,11 +21,19 @@ public class UserInterface : MonoBehaviour
     public Button btnInsert;
     public Button btnUpdate;
 
+    public InputField SelectInput;
+    public Text Output;
+
     // Start is called before the first frame update
     void Start()
     {
         dbm = new DataBaseManager();
         dbm.ConnectToDB("Rover.db");
+        btnShow.onClick.AddListener(ClickToShow);
+        btnSelect.onClick.AddListener(ClickToShowById);
+        btnInsert.onClick.AddListener(ClickToInsert);
+        btnUpdate.onClick.AddListener(ClickToUpdate);
+        btnDelete.onClick.AddListener(ClickToDelete);
     }
 
     // Update is called once per frame
@@ -36,6 +44,7 @@ public class UserInterface : MonoBehaviour
 
     public void ClickToShow()
     {
+        Output.text = String.Empty;
         var arr = dbm.GetAllMazeRecord();
 
         int rowLength = arr.GetLength(0);
@@ -50,13 +59,14 @@ public class UserInterface : MonoBehaviour
             {
                 str += arr[i][j] + " ";
             }
-            Debug.Log(str);
+            Output.text += str + "\n";
         }
     }
 
     public void ClickToShowById()
     {
-        var arr = dbm.GetMazeById(mazeUid);
+        Output.text = String.Empty;
+        var arr = dbm.GetMazeById(System.Convert.ToInt32(SelectInput.text));
 
         int rowLength = arr.GetLength(0);
         int colLength = arr[0].Length;
@@ -70,12 +80,13 @@ public class UserInterface : MonoBehaviour
             {
                 str += arr[i][j] + " ";
             }
-            Debug.Log(str);
+            Output.text += str;
         }
     }
 
     public void ClickToInsert()
     {
+        Output.text = String.Empty;
         int[] nodes = new int[4] { 1, 2, 3, 4 };
         string[,] edges = new string[4, 3]
         {
@@ -86,17 +97,22 @@ public class UserInterface : MonoBehaviour
         };
         mazeUid = provideUid();
         int resultCode = dbm.InsertMazeRecord(mazeUid, nodes, edges);
+        this.ClickToShow();
     }
 
     public void ClickToUpdate()
     {
+        Output.text = String.Empty;
         string[] edges = new string[3] { "1", "3", "E" };
         int resultCode = dbm.UpdateMazeDirection(mazeUid, edges);
+        this.ClickToShow();
     }
 
     public void ClickToDelete()
     {
+        Output.text = String.Empty;
         int resultCode = dbm.DeleteMazeById(mazeUid);
+        this.ClickToShow();
     }
 
     private int provideUid()
