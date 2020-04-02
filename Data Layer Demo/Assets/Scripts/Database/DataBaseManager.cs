@@ -37,7 +37,10 @@ public class DataBaseManager
     {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
-        selectvalue.Add("*");
+        selectvalue.Add(Constants.COLUMN_ID);
+        selectvalue.Add(Constants.COLUMN_NODE);
+        selectvalue.Add(Constants.COLUMN_CONNECTTO);
+        selectvalue.Add(Constants.COLUMN_DIRECTION);
 
         Dictionary<string, string> condition = new Dictionary<string, string>();
 

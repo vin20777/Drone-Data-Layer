@@ -80,7 +80,7 @@ public class UserInterface : MonoBehaviour
             {
                 str += arr[i][j] + " ";
             }
-            Output.text += str;
+            Output.text += str + "\n";
         }
     }
 
