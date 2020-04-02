@@ -16,7 +16,8 @@ public enum MAZE_OBJECT {
     Path = 4
 }
 
-public class LegacyDataLayerAPI {
+public class LegacyDataLayerAPI
+{
     private readonly string fileName = "Rover.db";
     private SqliteConnection dbConnection;
     private SqliteCommand dbCommand;
@@ -24,18 +25,23 @@ public class LegacyDataLayerAPI {
 
     // private Dictionary<int, int[,]> mapDB;
 
-    public LegacyDataLayerAPI() {
+    public LegacyDataLayerAPI()
+    {
         string filePath = Application.streamingAssetsPath + "/" + fileName;
-        try {
+        try
+        {
             dbConnection = new SqliteConnection("Data Source = " + filePath);
             dbConnection.Open();
             Debug.Log("Success to connect database: " + fileName);
-        } catch (System.Exception e) {
+        }
+        catch (System.Exception e)
+        {
             Debug.Log(e.Message);
         }
     }
 
-    internal void setMapStructure(Func<int> provideUid, int[, ] sampleMaze) {
+    internal void setMapStructure(Func<int> provideUid, int[,] sampleMaze)
+    {
         throw new NotImplementedException();
     }
 
@@ -48,7 +54,8 @@ public class LegacyDataLayerAPI {
     /// </summary>
     /// <param name="id"></param>
     /// <param name="maze"></param>
-    public void setMapStructure(int id, int[, ] maze) {
+    public void setMapStructure(int id, int[,] maze)
+    {
         // mapDB.Add(id, maze);
     }
 
@@ -61,12 +68,15 @@ public class LegacyDataLayerAPI {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public Dictionary<string, object> getMapStructure(int id) {
-        int[, ] maze = getMazeSize(id);
+    public Dictionary<string, object> getMapStructure(int id)
+    {
+        int[,] maze = getMazeSize(id);
         dataReader =
             ExecuteQuery("SELECT X,Y,Value FROM Maze WHERE ID = " + id + ";");
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
                 int x = dataReader.GetInt32(0);
                 int y = dataReader.GetInt32(1);
                 int val = dataReader.GetInt32(2);
@@ -79,23 +89,26 @@ public class LegacyDataLayerAPI {
         return result;
     }
 
-    private Dictionary<int, string> generateDescription() {
+    private Dictionary<int, string> generateDescription()
+    {
         Dictionary<int, string> description = new Dictionary<int, string>();
-        description.Add((int) MAZE_OBJECT.OpenArea, "OpenArea");
-        description.Add((int) MAZE_OBJECT.Wall, "Wall");
-        description.Add((int) MAZE_OBJECT.Starting, "Starting");
-        description.Add((int) MAZE_OBJECT.Ending, "Ending");
-        description.Add((int) MAZE_OBJECT.Path, "Path");
+        description.Add((int)MAZE_OBJECT.OpenArea, "OpenArea");
+        description.Add((int)MAZE_OBJECT.Wall, "Wall");
+        description.Add((int)MAZE_OBJECT.Starting, "Starting");
+        description.Add((int)MAZE_OBJECT.Ending, "Ending");
+        description.Add((int)MAZE_OBJECT.Path, "Path");
 
         return description;
     }
 
-    private int[, ] getMazeSize(int id) {
+    private int[,] getMazeSize(int id)
+    {
         dataReader = ExecuteQuery(
             "SELECT max(X),max(Y) FROM Maze WHERE ID = " + id + ";");
         int x = 0;
         int y = 0;
-        if (dataReader.Read()) {
+        if (dataReader.Read())
+        {
             x = dataReader.GetInt32(0) + 1;
             y = dataReader.GetInt32(1) + 1;
         }
@@ -114,7 +127,8 @@ public class LegacyDataLayerAPI {
     /// <param name="path"></param>
     /// <param name="velocity"></param>
     public void setPathRecord(int id, int mazeId, int[][] path,
-                              int[] velocity) {}
+                              int[] velocity)
+    { }
 
     /// <summary>
     /// Fourth API: Get Path Record.
@@ -125,13 +139,16 @@ public class LegacyDataLayerAPI {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public Dictionary<string, object> getPathRecord(int id) {
+    public Dictionary<string, object> getPathRecord(int id)
+    {
         Dictionary<string, object> result = new Dictionary<string, object>();
-        int[, ] res = getPathSize(id);
+        int[,] res = getPathSize(id);
         dataReader =
             ExecuteQuery("SELECT Step, X , Y FROM Path WHERE ID = " + id + ";");
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
                 int step = dataReader.GetInt32(0) - 1;
                 int x = dataReader.GetInt32(1);
                 int y = dataReader.GetInt32(2);
@@ -144,11 +161,13 @@ public class LegacyDataLayerAPI {
         return result;
     }
 
-    private int[, ] getPathSize(int id) {
+    private int[,] getPathSize(int id)
+    {
         dataReader = ExecuteQuery(
             "SELECT count(Step) FROM Path WHERE SolutionID = " + id + ";");
         int step = 0;
-        if (dataReader.Read()) {
+        if (dataReader.Read())
+        {
             step = dataReader.GetInt32(0);
         }
         return new int[step, 2];
@@ -162,7 +181,8 @@ public class LegacyDataLayerAPI {
     /// </summary>
 
     public void setCommandsList(int id, int mazeId, string[] commands,
-                                bool isRobot) {}
+                                bool isRobot)
+    { }
 
     /// <summary>
     /// Sixth API: Get Commands List.
@@ -173,13 +193,16 @@ public class LegacyDataLayerAPI {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public Dictionary<string, object> getCommandsList(int id) {
+    public Dictionary<string, object> getCommandsList(int id)
+    {
         Dictionary<string, object> result = new Dictionary<string, object>();
         string[] res = getCommandsSize(id);
         dataReader = ExecuteQuery(
             "SELECT Step,Command FROM Commands WHERE ID = " + id + ";");
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
                 int index = dataReader.GetInt32(0) - 1;
                 res[index] = dataReader.GetString(1);
             }
@@ -188,11 +211,13 @@ public class LegacyDataLayerAPI {
         return result;
     }
 
-    private string[] getCommandsSize(int id) {
+    private string[] getCommandsSize(int id)
+    {
         dataReader = ExecuteQuery(
             "SELECT count(Step) FROM Commands WHERE ID = " + id + ";");
         string[] res = new string[0];
-        if (dataReader.Read()) {
+        if (dataReader.Read())
+        {
             int size = dataReader.GetInt32(0);
             res = new string[size];
         }
@@ -218,7 +243,8 @@ public class LegacyDataLayerAPI {
     /// <returns></returns>
 
     /* General database functions. */
-    public SqliteDataReader ExecuteQuery(string queryString) {
+    public SqliteDataReader ExecuteQuery(string queryString)
+    {
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
         Debug.Log(queryString);
@@ -226,119 +252,24 @@ public class LegacyDataLayerAPI {
         return dataReader;
     }
 
-    public void CloseConnection() {
-        if (dbCommand != null) {
+    public void CloseConnection()
+    {
+        if (dbCommand != null)
+        {
             dbCommand.Cancel();
         }
         dbCommand = null;
 
-        if (dataReader != null) {
+        if (dataReader != null)
+        {
             dataReader.Close();
         }
         dataReader = null;
 
-        if (dbConnection != null) {
+        if (dbConnection != null)
+        {
             dbConnection.Close();
         }
         dbConnection = null;
     }
-
-    public class DBManager {
-        public static SQLiteConnection GetSqlconnection() {
-            SQLiteConnection conn = new SQLiteConnection();
-            try {
-                conn.ConnectionString = "Data Source =Rover.db";
-                conn.Open();
-                conn.Close();
-            } catch {
-
-                throw new Exception("connect failed");
-            }
-
-            return conn;
-        }
-
-        // return the line number
-        public static int get(string sql) {
-            SQLiteConnection conn = GetSqlconnection();
-            try {
-                conn.Open();
-                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                return cmd.ExecuteNonQuery();
-            } catch (Exception ex) {
-                throw new Exception(ex.Message);
-            } finally {
-                conn.Close();
-                conn.Dispose();
-            }
-        }
-
-        // return the DataTable type of the result. Usually use this.
-        public DataTable getDataTable(string sql) {
-            SQLiteConnection conn = GetSqlconnection();
-            try {
-                conn.Open();
-                SQLiteDataAdapter da = new SQLiteDataAdapter(sql, conn);
-                DataSet ds = new DataSet();
-                da.Fill(ds);
-                return ds.Tables[0];
-            } catch (Exception ex) {
-                throw new Exception(ex.Message);
-            } finally {
-                conn.Close();
-                conn.Dispose();
-            }
-        }
-
-        public SQLiteDataReader GetDataReader(string sql) {
-
-            SQLiteConnection conn = GetSqlconnection();
-            try {
-                conn.Open();
-                SQLiteCommand cmd = new SQLiteCommand();
-                return cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            } catch (Exception ex) {
-                throw new Exception(ex.Message);
-            } finally {
-                conn.Close();
-                conn.Dispose();
-            }
-        }
-
-        void Start() {
-            Debug.Log("This is a demo of data layer with dll.");
-            Debug.Log("1. Initial dpc class from dll.");
-            dpc = new DatabaseProviderClass();
-
-            Debug.Log("2. Try store a maze into database.");
-            int[][] fooMaze =
-                new int[][]{new int[]{1, 1, 1, 1, 1}, new int[]{1, 0, 0, 0, 1},
-                            new int[]{1, 1, 1, 0, 1}, new int[]{1, 2, 0, 0, 1},
-                            new int[]{1, 1, 1, 1, 1}};
-            dpc.SetMapStructure(100, fooMaze);
-
-            Debug.Log("3. Try get the maze from database.");
-            int[][] mazeData = dpc.GetMapStructure(100);
-            Debug.Log("----You can now use \"mazeData\" now.----");
-
-            Debug.Log("4. Try store a commands list into database.");
-            String[] fooCommand =
-                new String[]{"right", "right", "down", "left", "left"};
-            dpc.SetCommands(80, fooCommand);
-
-            Debug.Log("5. Try get the command list back from database.");
-            String[] commands = dpc.GetCommands(80);
-            Debug.Log("----You can now use \"commands\" now.----");
-
-            Debug.Log("6. Try store a path into database.");
-            int[][] path =
-                new int[][]{new int[]{1, 1}, new int[]{2, 1}, new int[]{3, 1},
-                            new int[]{3, 2}, new int[]{3, 3}, new int[]{2, 3},
-                            new int[]{1, 3}};
-            dpc.SetPathRecords(70, path);
-
-            Debug.Log("7. Try get the maze from database.");
-            int[][] mazePath = dpc.GetPathRecords(70);
-            Debug.Log("----You can now use \"mazePath\" now.----");
-        }
-    }
+}
