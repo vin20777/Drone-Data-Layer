@@ -472,6 +472,7 @@ public class DataBaseManager
     /// <returns></returns>
     private SqliteDataReader ExecuteQuery(string queryString)
     {
+        Debug.Log(queryString);
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
         Debug.Log(queryString);
