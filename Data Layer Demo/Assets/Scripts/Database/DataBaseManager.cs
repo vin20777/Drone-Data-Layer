@@ -28,6 +28,29 @@ public class DataBaseManager {
         }
     }
 
+    public string[][] GetAllMazeRecord()
+    {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add(Constants.COLUMN_ID);
+        selectvalue.Add(Constants.COLUMN_NODE);
+        selectvalue.Add(Constants.COLUMN_CONNECTTO);
+        selectvalue.Add(Constants.COLUMN_DIRECTION);
+
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+
+        List<string[]> res = new List<string[]>();
+        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                res.Add(new string[4] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+            }
+        }
+        return res.ToArray();
+    }
+
     /// <summary>
     /// This method is to get back maze record by Id
     /// </summary>
@@ -44,16 +67,13 @@ public class DataBaseManager {
         condition.Add(Constants.COLUMN_ID, id.ToString());
 
         List<string[]> res = new List<string[]>();
-        dataReader = ExecuteQuery(
-            sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
-                res.Add(new string[3]{dataReader [Constants.COLUMN_NODE]
-                                          .ToString(),
-                                      dataReader [Constants.COLUMN_CONNECTTO]
-                                          .ToString(),
-                                      dataReader [Constants.COLUMN_DIRECTION]
-                                          .ToString()});
+        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                //res.Add(new string[4] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
             }
         }
         return res.ToArray();
@@ -61,15 +81,16 @@ public class DataBaseManager {
 
     /// <summary>
     /// First API: Insert Maze Record.
-    /// Parameters: int id, int[] nodes, string[,] edges
+    /// Parameters: int id, string[,] edges
     /// Return Type: int (Success or Failure)
     /// Team may use: Algorithm
     /// Definition: Pass an unique id and the maze to store.
     /// </summary>
-    /// <param name="nodes"></param>
     /// <param name="edges"></param>
-    public int InsertMazeRecord(int id, int[] nodes, string[, ] edges) {
-        // sample data:
+
+    public int InsertMazeRecord(int id, string[,] edges)
+    {
+        // sample data: 
         // nodes = new int [4] {1, 2, 3, 4};
         // edges = new int [4, 3]{
         // {'1','2','E'}, {'1','4','N'}, {'2','3','W'}, {'3','4','S'}
@@ -77,8 +98,8 @@ public class DataBaseManager {
 
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
-
-        if (errorCheckMaze(id, nodes, edges)) {
+        if (errorCheckMaze(id, edges))
+        {
             result = Constants.RESPONSE_CODE_FAILURE;
             return result;
         }
@@ -169,7 +190,9 @@ public class DataBaseManager {
         return result;
     }
 
-#region UNDONE Work
+    // TODO: SetSensorMatrixById, GetSensorMatrixById
+
+    #region UNDONE Work
     /// <summary>
     /// return the maze according to id
     /// </summary>
@@ -408,7 +431,9 @@ public class DataBaseManager {
     /// </summary>
     /// <param name="queryString"></param>
     /// <returns></returns>
-    private SqliteDataReader ExecuteQuery(string queryString) {
+    private SqliteDataReader ExecuteQuery(string queryString)
+    {
+        Debug.Log(queryString);
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
         Debug.Log(queryString);
@@ -451,16 +476,10 @@ public class DataBaseManager {
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
     /// <returns></returns>
-    private bool errorCheckMaze(int id, int[] nodes, string[, ] edges) {
-        if (id < 0) // Check ID
+    private bool errorCheckMaze(int id, string[,] edges)
+    {
+        if (id < 0)                                      //Check ID
             return true;
-
-        for (int i = 0; i < nodes.Length; i++) // Check nodes
-        {
-            if (nodes[i] < 0)
-                return true;
-        }
-
         List<string> directionList = new List<string>();
         directionList.Add("N");
         directionList.Add("S");

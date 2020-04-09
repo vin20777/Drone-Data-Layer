@@ -27,7 +27,7 @@ public class UnitTest : MonoBehaviour {
         string[, ] edges = new string[4, 3]{
             {"1", "3", "S"}, {"2", "3", "N"}, {"2", "4", "W"}, {"3", "4", "E"}};
         mazeUid = provideUid();
-        int resultCode = dbm.InsertMazeRecord(mazeUid, nodes, edges);
+        int resultCode = dbm.InsertMazeRecord(mazeUid, edges);
         Debug.Log("Insert Maze Result:" +
                   (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
                    : "Failure"));
@@ -42,6 +42,7 @@ public class UnitTest : MonoBehaviour {
     }
 
     void TestGetMazeById() {
+        mazeUid = 37887891;
         var arr = dbm.GetMazeById(mazeUid);
 
         int rowLength = arr.GetLength(0);
