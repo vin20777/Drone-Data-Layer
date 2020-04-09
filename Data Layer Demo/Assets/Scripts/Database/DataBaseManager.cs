@@ -50,7 +50,7 @@ public class DataBaseManager
         {
             if (dataReader.Read())
             {
-                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+                res.Add(new string[4] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
             }
         }
         return res.ToArray();
@@ -78,7 +78,7 @@ public class DataBaseManager
         {
             if (dataReader.Read())
             {
-                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+                res.Add(new string[4] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
             }
         }
         return res.ToArray();

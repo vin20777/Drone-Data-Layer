@@ -15,7 +15,7 @@ public class DatabaseTest : MonoBehaviour
     public Text field1;
     public Text field2;
 
-    public InputField outputtext;
+    public Text outputtext;
     private DataBaseManager db;
     // Start is called before the first frame update
     void Start()
@@ -83,15 +83,10 @@ public class DatabaseTest : MonoBehaviour
                 outputtext.text += str + "\n";
             }
         }
-        else if (dp.value.Equals("InsertMazeRecord"))
+        else if (dp.captionText.text.Equals("InsertMazeRecord"))
         {
-            /*  
-                1, 3, S;
-                2, 3, N;
-                2, 4, W;
-                3, 4, E;
-            */
 
+            // format: 1,4,S;2,3,N;3,4,W
             string[] temp = text2.text.Split(';');
             string[,] edges = new string[temp.Length, 3];
             
@@ -110,6 +105,7 @@ public class DatabaseTest : MonoBehaviour
         {
             string[] temp = text2.text.Split(',');
             int res = db.UpdateMazeDirection(int.Parse(text1.text), temp);
+            text2.placeholder.GetComponent<Text>().text = string.Empty;
             this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("DeleteMazeById"))
@@ -129,6 +125,11 @@ public class DatabaseTest : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// NOT USED SO FAR
+    /// </summary>
+    /// <param name="original"></param>
+    /// <returns></returns>
     public static string[,] TranStrToTwoArray(string original)
     {
         if (original.Length == 0)
@@ -157,43 +158,61 @@ public class DatabaseTest : MonoBehaviour
         {          
             case 0:
                 dataformat.text = string.Empty;
+                field1.text = "Input parameter 1:";
+                field2.text = "Input parameter 2:";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
                 break;
             case 1:
                 dataformat.text = "This method has 0 input";
-                field1.text = "No Input - ";
-                field2.text = "No Input - ";
+                field1.text = "Do Not Input: ";
+                field2.text = "Do Not Input: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
                 break;
             case 2:
                 dataformat.text = "This method has 1 input: id";
                 field1.text = "Id:";
-                field2.text = "No Input - ";
+                field2.text = "Do Not Input: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
                 break;
             case 3:
                 dataformat.text = "This method has 2 inputs: id, edges";
                 field1.text = "Id:";
                 field2.text = "Edges: ";
-                text2.placeholder.GetComponent<Text>().text = "format: 1,3,S;2,3,N;2,4,W;3,4,E;";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
+                text2.placeholder.GetComponent<Text>().text = "format: 1,4,S;2,3,N;3,4,W";
                 break;
             case 4:
                 dataformat.text = "This method has 2 inputs: id, edge";
                 field1.text = "Id:";
                 field2.text = "Edge: ";
-                text2.placeholder.GetComponent<Text>().text = "format: 1,3,S";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
+                text2.placeholder.GetComponent<Text>().text = "format: 1,3,W";
                 break;
             case 5:
                 dataformat.text = "This method has 1 input: id";
                 field1.text = "Id:";
-                field2.text = "No Input - ";
+                field2.text = "Do Not Input: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
                 break;
             case 6:
                 dataformat.text = "This method has 2 inputs: id, matrix";
                 field1.text = "Id:";
-                field2.text = "Matrix: ";
+                field2.text = "Do Not Input: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
                 break;
             case 7:
                 dataformat.text = "This method has 1 input: id";
                 field1.text = "Id:";
-                field2.text = "No Input - ";
+                field2.text = "Do Not Input: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
                 break;
         }
     }
