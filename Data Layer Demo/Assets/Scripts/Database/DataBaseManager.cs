@@ -190,38 +190,62 @@ public class DataBaseManager {
         return result;
     }
 
-    // TODO: SetSensorMatrixById, GetSensorMatrixById
-
-    #region UNDONE Work
+    // TODO: SetSensorMatrixById
     /// <summary>
-    /// return the maze according to id
+    /// Set the environment record by the sensor.
+    /// Could be any size.
+    /// </summary>
+    /// <param name="id"></param>
+    /// /// <param name="matrix"></param>
+    /// <returns></returns>
+    public void SetSensorMatrixById(int id, int[,] matrix)
+    {
+
+    }
+
+    // TODO: GetSensorMatrixById
+    /// <summary>
+    /// return the sensor according to id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public int[, ] getMazeByID(int id) {
+    public string GetSensorMatrixById(int id)
+    {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
-        selectvalue.Add("X");
-        selectvalue.Add("Y");
-        selectvalue.Add("Value");
-        string tableName = Constants.TABLE_MAZE;
+        selectvalue.Add("Comment");
+        string tableName = Constants.TABLE_SENSOR;
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
-
-        int[, ] res = getMazeSize(id);
         dataReader =
             ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
-                int x = dataReader.GetInt32(0);
-                int y = dataReader.GetInt32(1);
-                int val = dataReader.GetInt32(2);
-                res[x, y] = val;
-            }
+        string res = "";
+        if (dataReader.Read())
+        {
+            res = dataReader.GetString(0);
         }
         return res;
     }
 
+    // TODO: More requirements from algorithm team
+    public int CreateSession(string sessionType, string algorithmType, int x,
+                             int y)
+    {
+        return 0;
+    }
+
+    public bool UpdateCell(int sessionId, int x, int y, int value)
+    {
+        return true;
+    }
+
+    public string GetCell(int sessionId, int x, int y) { return string.Empty; }
+
+    public string[,] GetMaze(int sessionId) { return new string[1, 1]; }
+
+    public void AddCommand(int sessionId, string command) { }
+
+    #region UNDONE Work
     /// <summary>
     /// return the type of the object in maze according to coordinates
     /// </summary>
@@ -281,6 +305,7 @@ public class DataBaseManager {
         }
         return new int[step, 2];
     }
+
     /// <summary>
     /// return the sepecific path according to id
     /// </summary>
@@ -308,30 +333,6 @@ public class DataBaseManager {
                 res[step, 1] = y;
             }
         }
-
-        return res;
-    }
-
-    /// <summary>
-    /// return the sensor according to id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public string getSensorByID(int id) {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("Comment");
-        string tableName = "Sensor";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
-
-        dataReader =
-            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        string res = "";
-        if (dataReader.Read()) {
-            res = dataReader.GetString(0);
-        }
-
         return res;
     }
 
@@ -347,7 +348,6 @@ public class DataBaseManager {
         string tableName = "Commands";
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
-
         dataReader =
             ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string[] res = new string[0];
@@ -384,25 +384,6 @@ public class DataBaseManager {
         }
         return res;
     }
-
-    /*
-     * New requirement from algorithm team
-     */
-
-    public int CreateSession(string sessionType, string algorithmType, int x,
-                             int y) {
-        return 0;
-    }
-
-    public bool UpdateCell(int sessionId, int x, int y, int value) {
-        return true;
-    }
-
-    public string GetCell(int sessionId, int x, int y) { return string.Empty; }
-
-    public string[, ] GetMaze(int sessionId) { return new string[1, 1]; }
-
-    public void AddCommand(int sessionId, string command) {}
 #endregion
 
     /// <summary>
@@ -495,9 +476,7 @@ public class DataBaseManager {
             else if (!directionList.Contains(edges[i, 2]))
                 return true;
         }
-
         return false;
     }
-
 #endregion
 }

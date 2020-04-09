@@ -33,7 +33,7 @@ public class DatabaseTest : MonoBehaviour
     public void ConnectDB()
     {
         db.ConnectToDB(dbname.text);
-        outputtext.text = "success to connect db";
+        outputtext.text = "Success to connect to: " + dbname.text;
     }
 
     private void AlwaysDisplayMazeRecord()
@@ -44,7 +44,7 @@ public class DatabaseTest : MonoBehaviour
         int rowLength = arr.GetLength(0);
         int colLength = arr[0].Length;
 
-        Debug.Log("Get All Maze Result:");
+        //Debug.Log("Get All Maze Result:");
 
         for (int i = 0; i < rowLength; i++)
         {
