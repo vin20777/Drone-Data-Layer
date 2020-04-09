@@ -12,7 +12,9 @@ public class DatabaseTest : MonoBehaviour
     public InputField dbname;
     public InputField text1;
     public InputField text2;
-    public InputField text3;
+    public Text field1;
+    public Text field2;
+
     public InputField outputtext;
     private DataBaseManager db;
     // Start is called before the first frame update
@@ -34,102 +36,96 @@ public class DatabaseTest : MonoBehaviour
         outputtext.text = "success to connect db";
     }
 
+    private void AlwaysDisplayMazeRecord()
+    {
+        string[][] arr = db.GetAllMazeRecord();
+        outputtext.text = string.Empty;
+
+        int rowLength = arr.GetLength(0);
+        int colLength = arr[0].Length;
+
+        Debug.Log("Get All Maze Result:");
+
+        for (int i = 0; i < rowLength; i++)
+        {
+            string str = String.Empty;
+            for (int j = 0; j < colLength; j++)
+            {
+                str += arr[i][j] + " ";
+            }
+            outputtext.text += str + "\n";
+        }
+    }
+
     public void ExecuteSql()
     {
-        //Debug.Log(dp.captionText.text);
         if (dp.captionText.text.Equals("GetAllMazeRecord"))
         {
-            Debug.Log("1");
-            string[][] res = db.GetAllMazeRecord();
-            string text = "";
-            for(int i =0;i<res[0].Length;i++)
-            {
-                for (int j = 0; j < res[1].Length; j++)
-                {
-                    text += res[i][j] + ",";
-                }
-
-            }
-            outputtext.text = text;
+            this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("GetMazeById"))
         {
-            string[][] res = db.GetMazeById(int.Parse(text1.text));
-            string text = "";
-            for (int i = 0; i < res[0].Length; i++)
-            {
-                for (int j = 0; j < res[1].Length; j++)
-                {
-                    text += res[i][j] + ",";
-                }
+            string[][] arr = db.GetMazeById(int.Parse(text1.text));
+            outputtext.text = string.Empty;
 
+            int rowLength = arr.GetLength(0);
+            int colLength = arr[0].Length;
+
+            Debug.Log("Get Maze Result:");
+
+            for (int i = 0; i < rowLength; i++)
+            {
+                string str = String.Empty;
+                for (int j = 0; j < colLength; j++)
+                {
+                    str += arr[i][j] + " ";
+                }
+                outputtext.text += str + "\n";
             }
-            outputtext.text = text;
         }
-/*        else if (dp.value.Equals("InsertMazeRecord"))
+        else if (dp.value.Equals("InsertMazeRecord"))
         {
-            string[] temp = text2.text.Split(',');
-            int[] temp2 = Array.ConvertAll<string, int>(temp, int.Parse);
-            string[] temp3 = text3.text.Split('],[');
-            db.InsertMazeRecord(int.Parse(text1.text), temp2, temp3);
-        }*/
+            /*  
+                1, 3, S;
+                2, 3, N;
+                2, 4, W;
+                3, 4, E;
+            */
+
+            string[] temp = text2.text.Split(';');
+            string[,] edges = new string[temp.Length, 3];
+            
+            for(int i = 0; i < temp.Length; i++)
+            {
+                string[] values = temp[i].Split(',');
+                edges[i, 0] = values[0].ToString();
+                edges[i, 1] = values[1].ToString();
+                edges[i, 2] = values[2].ToString();
+            }
+            db.InsertMazeRecord(int.Parse(text1.text), edges);
+            text2.placeholder.GetComponent<Text>().text = string.Empty;
+            this.AlwaysDisplayMazeRecord();
+        }
         else if (dp.captionText.text.Equals("UpdateMazeDirection"))
         {
             string[] temp = text2.text.Split(',');
-            int res = db.UpdateMazeDirection(int.Parse(text1.text),temp);
-            outputtext.text = res.ToString();
+            int res = db.UpdateMazeDirection(int.Parse(text1.text), temp);
+            this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("DeleteMazeById"))
         {
             int res = db.DeleteMazeById(int.Parse(text1.text));
-            outputtext.text = res.ToString();
+            this.AlwaysDisplayMazeRecord();
         }
-/*        else if (dp.value.Equals("getMazeByID"))
+        else if (dp.captionText.text.Equals("SetSensorMatrixById"))
         {
-            db.getMazeByID(int.Parse(text1.text));
-        }*/
-        else if (dp.captionText.text.Equals("getPathSize"))
-        {
-            int[,] res = db.getPathSize(int.Parse(text1.text));
-            string text = "";
-            for (int i = 0; i < res.GetLength(0); i++)
-            {
-                for (int j = 0; j < res.GetLength(1); j++)
-                {
-                    text += res[i,j] + ",";
-                }
-
-            }
-            outputtext.text = text;
+            // TODO
+            outputtext.text = string.Empty;
         }
-        else if (dp.captionText.text.Equals("getPathByID"))
+        else if (dp.captionText.text.Equals("GetSensorMatrixById"))
         {
-            int[,] res = db.getPathByID(int.Parse(text1.text));
-            string text = "";
-            for (int i = 0; i < res.GetLength(0); i++)
-            {
-                for (int j = 0; j < res.GetLength(1); j++)
-                {
-                    text += res[i, j] + ",";
-                }
-
-            }
-            outputtext.text = text;
-        }
-        else if (dp.captionText.text.Equals("getSensorByID"))
-        {
-            string res = db.getSensorByID(int.Parse(text1.text));
-            outputtext.text = res;
-        }
-        else if (dp.captionText.text.Equals("getCommandsSize"))
-        {
-            string[] res = db.getCommandsSize(int.Parse(text1.text));
-            outputtext.text = res.ToString();
-        }
-        else if (dp.captionText.text.Equals("getCommandByID"))
-        {
-            string[] res = db.getCommandByID(int.Parse(text1.text));
-            outputtext.text = res.ToString();
+            // TODO
+            outputtext.text = string.Empty;
         }
     }
 
@@ -158,36 +154,46 @@ public class DatabaseTest : MonoBehaviour
     public void OnValueChange(int value)
     {
         switch (value)
-        {
+        {          
             case 0:
-                dataformat.text = "0 input";
+                dataformat.text = string.Empty;
                 break;
             case 1:
-                dataformat.text = "1 input id";
+                dataformat.text = "This method has 0 input";
+                field1.text = "No Input - ";
+                field2.text = "No Input - ";
                 break;
-/*            case 2:
-                dataformat.text = "3 input id, node, edge";
-                break;*/
             case 2:
-                dataformat.text = "2 input id, edge";
+                dataformat.text = "This method has 1 input: id";
+                field1.text = "Id:";
+                field2.text = "No Input - ";
                 break;
             case 3:
-                dataformat.text = "1 input id";
+                dataformat.text = "This method has 2 inputs: id, edges";
+                field1.text = "Id:";
+                field2.text = "Edges: ";
+                text2.placeholder.GetComponent<Text>().text = "format: 1,3,S;2,3,N;2,4,W;3,4,E;";
                 break;
             case 4:
-                dataformat.text = "1 input id";
+                dataformat.text = "This method has 2 inputs: id, edge";
+                field1.text = "Id:";
+                field2.text = "Edge: ";
+                text2.placeholder.GetComponent<Text>().text = "format: 1,3,S";
                 break;
             case 5:
-                dataformat.text = "1 input id";
+                dataformat.text = "This method has 1 input: id";
+                field1.text = "Id:";
+                field2.text = "No Input - ";
                 break;
             case 6:
-                dataformat.text = "1 input id";
+                dataformat.text = "This method has 2 inputs: id, matrix";
+                field1.text = "Id:";
+                field2.text = "Matrix: ";
                 break;
             case 7:
-                dataformat.text = "1 input id";
-                break;
-            case 8:
-                dataformat.text = "1 input id";
+                dataformat.text = "This method has 1 input: id";
+                field1.text = "Id:";
+                field2.text = "No Input - ";
                 break;
         }
     }

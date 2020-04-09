@@ -87,7 +87,6 @@ public class UserInterface : MonoBehaviour
     public void ClickToInsert()
     {
         Output.text = String.Empty;
-        int[] nodes = new int[4] { 1, 2, 3, 4 };
         string[,] edges = new string[4, 3]
         {
             {"1", "3", "S"},
@@ -96,7 +95,7 @@ public class UserInterface : MonoBehaviour
             {"3", "4", "E"}
         };
         mazeUid = provideUid();
-        int resultCode = dbm.InsertMazeRecord(mazeUid, nodes, edges);
+        int resultCode = dbm.InsertMazeRecord(mazeUid, edges);
         this.ClickToShow();
     }
 

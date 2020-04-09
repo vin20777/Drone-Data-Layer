@@ -35,7 +35,7 @@ public class UnitTest : MonoBehaviour
             {"3", "4", "E"}
         };
         mazeUid = provideUid();
-        int resultCode = dbm.InsertMazeRecord(mazeUid, nodes, edges);
+        int resultCode = dbm.InsertMazeRecord(mazeUid, edges);
         Debug.Log("Insert Maze Result:" +
             (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success" : "Failure"));
     }

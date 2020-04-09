@@ -86,14 +86,13 @@ public class DataBaseManager
 
     /// <summary>
     /// First API: Insert Maze Record.
-    /// Parameters: int id, int[] nodes, string[,] edges
+    /// Parameters: int id, string[,] edges
     /// Return Type: int (Success or Failure)
     /// Team may use: Algorithm
     /// Definition: Pass an unique id and the maze to store.
     /// </summary>
-    /// <param name="nodes"></param>
     /// <param name="edges"></param>
-    public int InsertMazeRecord(int id, int[] nodes, string[,] edges)
+    public int InsertMazeRecord(int id, string[,] edges)
     {
         // sample data: 
         // nodes = new int [4] {1, 2, 3, 4};
@@ -104,7 +103,7 @@ public class DataBaseManager
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
 
-        if (errorCheckMaze(id, nodes, edges))
+        if (errorCheckMaze(id, edges))
         {
             result = Constants.RESPONSE_CODE_FAILURE;
             return result;
@@ -205,6 +204,8 @@ public class DataBaseManager
 
         return result;
     }
+
+    // TODO: SetSensorMatrixById, GetSensorMatrixById
 
     #region UNDONE Work
     /// <summary>
@@ -516,17 +517,11 @@ public class DataBaseManager
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
     /// <returns></returns>
-    private bool errorCheckMaze(int id, int[] nodes, string[,] edges)
+    private bool errorCheckMaze(int id, string[,] edges)
     {
         if (id < 0)                                      //Check ID
             return true;
         
-        for(int i = 0; i < nodes.Length; i++)            //Check nodes
-        {
-            if (nodes[i] < 0)
-                return true;                     
-        }
-
         List<string> directionList = new List<string>();
         directionList.Add("N");
         directionList.Add("S");
