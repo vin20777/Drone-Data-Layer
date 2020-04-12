@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Mono.Data.Sqlite;
 using Sql;
@@ -211,10 +212,10 @@ public class DataBaseManager {
             columnName.Add(Constants.COLUMN_ID);
             columnName.Add(Constants.SENSOR_CONTENT);
 
-            string str = "'{";
+            string str = "'";
             for(int i = 0; i <= matrix.GetUpperBound(0); i++)
             {
-                str += "{";
+                str += "";
                 for (int j = 0; j <= matrix.GetUpperBound(1); j++)
                 {
                     str += matrix[i, j];
@@ -223,13 +224,13 @@ public class DataBaseManager {
                         str += ",";
                     }
                 }
-                str += "}";
+                str += "";
                 if(i != matrix.GetUpperBound(0))
                 {
-                    str += ",";
+                    str += ";";
                 }
             }
-            str += "}'";
+            str += "'";
 
             value.Clear();
             value.Add(id.ToString());
@@ -256,7 +257,7 @@ public class DataBaseManager {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public string GetSensorMatrixById(int id)
+    public int[,] GetSensorMatrixById(int id)
     {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
@@ -271,7 +272,22 @@ public class DataBaseManager {
         {
             res = dataReader.GetString(0);
         }
-        return res;
+
+        string[] split1 = res.Split(';');
+        int num1 = split1.Length;
+        int num2 = split1[0].Split(',').Length;
+        int[,] result = new int[num1, num2];
+        for(int i = 0; i < split1.Length; i++)
+        {
+            string[] split2 = split1[i].Split(',');
+            for(int j = 0; j < split2.Length; j++)
+            {
+                result[i, j] = Convert.ToInt32(split2[j]);
+            }
+
+        }
+
+        return result;
     }
 
     // TODO: More requirements from algorithm team

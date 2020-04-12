@@ -21,6 +21,7 @@ public class UnitTest : MonoBehaviour {
         //TestGetMazeById();
         TestDeleteMazeById();
         TestInsertSensor();
+        TestGetSensor();
     }
 
     void TestInsertMaze() {
@@ -76,6 +77,18 @@ public class UnitTest : MonoBehaviour {
         Debug.Log("Insert Sensor Result:" +
                   (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
                    : "Failure"));
+    }
+
+    void TestGetSensor()
+    {
+        int[,] matrix = dbm.GetSensorMatrixById(10);
+        for (int i = 0; i <= matrix.GetUpperBound(0); i++)
+        {
+            for(int j = 0; j <= matrix.GetUpperBound(1); j++)
+            {
+                Debug.Log(matrix[i, j] + ",");
+            }
+        }
     }
 
     private int provideUid() {
