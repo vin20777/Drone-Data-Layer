@@ -198,9 +198,56 @@ public class DataBaseManager {
     /// <param name="id"></param>
     /// /// <param name="matrix"></param>
     /// <returns></returns>
-    public void SetSensorMatrixById(int id, int[,] matrix)
+    public int SetSensorMatrixById(int id, int[,] matrix)
     {
+        SqlEncap sql = new SqlEncap();
+        int result = Constants.RESPONSE_CODE_SUCCESS;
 
+        List<string> columnName = new List<string>();
+        List<string> value = new List<string>();
+
+        try
+        {
+            columnName.Add(Constants.COLUMN_ID);
+            columnName.Add(Constants.SENSOR_CONTENT);
+
+            string str = "'{";
+            for(int i = 0; i <= matrix.GetUpperBound(0); i++)
+            {
+                str += "{";
+                for (int j = 0; j <= matrix.GetUpperBound(1); j++)
+                {
+                    str += matrix[i, j];
+                    if(j != matrix.GetUpperBound(1))
+                    {
+                        str += ",";
+                    }
+                }
+                str += "}";
+                if(i != matrix.GetUpperBound(0))
+                {
+                    str += ",";
+                }
+            }
+            str += "}'";
+
+            value.Clear();
+            value.Add(id.ToString());
+            value.Add(str);
+            //Debug.Log(str);
+
+            dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText =
+                sql.Insert(Constants.TABLE_SENSOR, columnName, value);
+            //Debug.Log(dbCommand.CommandText);
+            dbCommand.ExecuteNonQuery();
+        }
+        catch (SqliteException sqlEx)
+        {
+            result = Constants.RESPONSE_CODE_FAILURE;
+            Debug.LogError(sqlEx);
+        }
+        return result;
     }
 
     // TODO: GetSensorMatrixById
@@ -213,7 +260,7 @@ public class DataBaseManager {
     {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
-        selectvalue.Add("Comment");
+        selectvalue.Add("Content");
         string tableName = Constants.TABLE_SENSOR;
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());

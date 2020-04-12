@@ -18,8 +18,9 @@ public class UnitTest : MonoBehaviour {
         dbm.ConnectToDB("Rover.db");
         TestInsertMaze();
         TestUpdateMaze();
-        TestGetMazeById();
+        //TestGetMazeById();
         TestDeleteMazeById();
+        TestInsertSensor();
     }
 
     void TestInsertMaze() {
@@ -64,6 +65,15 @@ public class UnitTest : MonoBehaviour {
     void TestDeleteMazeById() {
         int resultCode = dbm.DeleteMazeById(mazeUid);
         Debug.Log("Delete Maze Result:" +
+                  (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
+                   : "Failure"));
+    }
+
+    void TestInsertSensor()
+    {
+        int[,] matrix = new int[4, 4] { { 1, 2, 3,4 }, { 2, 3, 4,5 }, { 3, 4, 5,6 },{ 5, 6, 7, 8 } };
+        int resultCode = dbm.SetSensorMatrixById(10, matrix);
+        Debug.Log("Insert Sensor Result:" +
                   (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
                    : "Failure"));
     }
