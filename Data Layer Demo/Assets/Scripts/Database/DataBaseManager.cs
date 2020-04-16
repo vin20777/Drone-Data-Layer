@@ -290,23 +290,38 @@ public class DataBaseManager {
         return result;
     }
 
-    // TODO: More requirements from algorithm team
-    public int CreateSession(string sessionType, string algorithmType, int x,
-                             int y)
+    // TODO: NEW requirements from algorithm team
+    public int CreateExploredMaze(int mazeId, int[,] exploredMaze)
     {
         return 0;
     }
 
-    public bool UpdateCell(int sessionId, int x, int y, int value)
+    public int UpdateMazeById(int mazeId, int[,] updatedMaze)
     {
-        return true;
+        return 0;
     }
 
-    public string GetCell(int sessionId, int x, int y) { return string.Empty; }
+    //update public int[,] GetMazeById(int mazeId)
 
-    public string[,] GetMaze(int sessionId) { return new string[1, 1]; }
+    public int UpdateMazeCoverage(int mazeId, float mazeCoverage)
+    {
+        return 0;
+    }
 
-    public void AddCommand(int sessionId, string command) { }
+    public int UpdateTimeTaken(int mazeId, int second)
+    {
+        return 0;
+    }
+
+    public int UpdateMoveHistory(int mazeId, String[] path)
+    {
+        return 0;
+    }
+
+    public void UpdatePoints(int mazeId, int points)
+    {
+
+    }
 
     #region UNDONE Work
     /// <summary>
