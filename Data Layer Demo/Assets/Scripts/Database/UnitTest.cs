@@ -73,6 +73,7 @@ public class UnitTest : MonoBehaviour {
     void TestInsertSensor()
     {
         int[,] matrix = new int[4, 4] { { 1, 2, 3,4 }, { 2, 3, 4,5 }, { 3, 4, 5,6 },{ 5, 6, 7, 8 } };
+
         int resultCode = dbm.SetSensorMatrixById(10, matrix);
         Debug.Log("Insert Sensor Result:" +
                   (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
