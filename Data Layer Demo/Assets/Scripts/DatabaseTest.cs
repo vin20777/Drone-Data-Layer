@@ -115,13 +115,45 @@ public class DatabaseTest : MonoBehaviour
         }
         else if (dp.captionText.text.Equals("SetSensorMatrixById"))
         {
-            // TODO
-            outputtext.text = string.Empty;
+            int id = int.Parse(text1.text);
+
+            string[] split1 = text2.text.Split(';');
+            int num1 = split1.Length;
+            int num2 = split1[0].Split(',').Length;
+            int[,] matrix = new int[num1, num2];
+            for (int i = 0; i < split1.Length; i++)
+            {
+                string[] split2 = split1[i].Split(',');
+                for (int j = 0; j < split2.Length; j++)
+                {
+                    matrix[i, j] = Convert.ToInt32(split2[j]);
+                }
+
+            }
+
+            int resultCode = db.SetSensorMatrixById(id, matrix);
+
+            outputtext.text = "Insert Sensor Result:" +
+                  (resultCode == 1 ? "Success"
+                   : "Failure");
         }
         else if (dp.captionText.text.Equals("GetSensorMatrixById"))
         {
-            // TODO
-            outputtext.text = string.Empty;
+            int[,] matrix = db.GetSensorMatrixById(int.Parse(text1.text));
+            string str = "";
+            for (int i = 0; i <= matrix.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j <= matrix.GetUpperBound(1); j++)
+                {
+                    str += matrix[i, j];
+                    if(j != matrix.GetUpperBound(1))
+                    {
+                        str += ",";
+                    }
+                }
+                str += "\n";
+            }
+            outputtext.text = str;
         }
     }
 
@@ -203,9 +235,10 @@ public class DatabaseTest : MonoBehaviour
             case 6:
                 dataformat.text = "This method has 2 inputs: id, matrix";
                 field1.text = "Id:";
-                field2.text = "Do Not Input: ";
+                field2.text = "Matrix: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
+                text2.placeholder.GetComponent<Text>().text = "format: 1,2,3;2,3,4;3,4,5";
                 break;
             case 7:
                 dataformat.text = "This method has 1 input: id";
