@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Mono.Data.Sqlite;
 using Sql;
@@ -28,6 +29,29 @@ public class DataBaseManager {
         }
     }
 
+    public string[][] GetAllMazeRecord()
+    {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add(Constants.COLUMN_ID);
+        selectvalue.Add(Constants.COLUMN_NODE);
+        selectvalue.Add(Constants.COLUMN_CONNECTTO);
+        selectvalue.Add(Constants.COLUMN_DIRECTION);
+
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+
+        List<string[]> res = new List<string[]>();
+        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                res.Add(new string[4] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+            }
+        }
+        return res.ToArray();
+    }
+
     /// <summary>
     /// This method is to get back maze record by Id
     /// </summary>
@@ -44,16 +68,13 @@ public class DataBaseManager {
         condition.Add(Constants.COLUMN_ID, id.ToString());
 
         List<string[]> res = new List<string[]>();
-        dataReader = ExecuteQuery(
-            sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
-                res.Add(new string[3]{dataReader [Constants.COLUMN_NODE]
-                                          .ToString(),
-                                      dataReader [Constants.COLUMN_CONNECTTO]
-                                          .ToString(),
-                                      dataReader [Constants.COLUMN_DIRECTION]
-                                          .ToString()});
+        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                //res.Add(new string[4] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
             }
         }
         return res.ToArray();
@@ -61,15 +82,16 @@ public class DataBaseManager {
 
     /// <summary>
     /// First API: Insert Maze Record.
-    /// Parameters: int id, int[] nodes, string[,] edges
+    /// Parameters: int id, string[,] edges
     /// Return Type: int (Success or Failure)
     /// Team may use: Algorithm
     /// Definition: Pass an unique id and the maze to store.
     /// </summary>
-    /// <param name="nodes"></param>
     /// <param name="edges"></param>
-    public int InsertMazeRecord(int id, int[] nodes, string[, ] edges) {
-        // sample data:
+
+    public int InsertMazeRecord(int id, string[,] edges)
+    {
+        // sample data: 
         // nodes = new int [4] {1, 2, 3, 4};
         // edges = new int [4, 3]{
         // {'1','2','E'}, {'1','4','N'}, {'2','3','W'}, {'3','4','S'}
@@ -77,8 +99,8 @@ public class DataBaseManager {
 
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
-
-        if (errorCheckMaze(id, nodes, edges)) {
+        if (errorCheckMaze(id, edges))
+        {
             result = Constants.RESPONSE_CODE_FAILURE;
             return result;
         }
@@ -169,36 +191,124 @@ public class DataBaseManager {
         return result;
     }
 
-#region UNDONE Work
+    // TODO: SetSensorMatrixById
     /// <summary>
-    /// return the maze according to id
+    /// Set the environment record by the sensor.
+    /// Could be any size.
+    /// </summary>
+    /// <param name="id"></param>
+    /// /// <param name="matrix"></param>
+    /// <returns></returns>
+    public int SetSensorMatrixById(int id, int[,] matrix)
+    {
+        SqlEncap sql = new SqlEncap();
+        int result = Constants.RESPONSE_CODE_SUCCESS;
+
+        List<string> columnName = new List<string>();
+        List<string> value = new List<string>();
+
+        try
+        {
+            columnName.Add(Constants.COLUMN_ID);
+            columnName.Add(Constants.SENSOR_CONTENT);
+
+            string str = "'";
+            for(int i = 0; i <= matrix.GetUpperBound(0); i++)
+            {
+                str += "";
+                for (int j = 0; j <= matrix.GetUpperBound(1); j++)
+                {
+                    str += matrix[i, j];
+                    if(j != matrix.GetUpperBound(1))
+                    {
+                        str += ",";
+                    }
+                }
+                str += "";
+                if(i != matrix.GetUpperBound(0))
+                {
+                    str += ";";
+                }
+            }
+            str += "'";
+
+            value.Clear();
+            value.Add(id.ToString());
+            value.Add(str);
+            //Debug.Log(str);
+
+            dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText =
+                sql.Insert(Constants.TABLE_SENSOR, columnName, value);
+            //Debug.Log(dbCommand.CommandText);
+            dbCommand.ExecuteNonQuery();
+        }
+        catch (SqliteException sqlEx)
+        {
+            result = Constants.RESPONSE_CODE_FAILURE;
+            Debug.LogError(sqlEx);
+        }
+        return result;
+    }
+
+    // TODO: GetSensorMatrixById
+    /// <summary>
+    /// return the sensor according to id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public int[, ] getMazeByID(int id) {
+    public int[,] GetSensorMatrixById(int id)
+    {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
-        selectvalue.Add("X");
-        selectvalue.Add("Y");
-        selectvalue.Add("Value");
-        string tableName = Constants.TABLE_MAZE;
+        selectvalue.Add("Content");
+        string tableName = Constants.TABLE_SENSOR;
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
-
-        int[, ] res = getMazeSize(id);
         dataReader =
             ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
-                int x = dataReader.GetInt32(0);
-                int y = dataReader.GetInt32(1);
-                int val = dataReader.GetInt32(2);
-                res[x, y] = val;
-            }
+        string res = "";
+        if (dataReader.Read())
+        {
+            res = dataReader.GetString(0);
         }
-        return res;
+
+        string[] split1 = res.Split(';');
+        int num1 = split1.Length;
+        int num2 = split1[0].Split(',').Length;
+        int[,] result = new int[num1, num2];
+        for(int i = 0; i < split1.Length; i++)
+        {
+            string[] split2 = split1[i].Split(',');
+            for(int j = 0; j < split2.Length; j++)
+            {
+                result[i, j] = Convert.ToInt32(split2[j]);
+            }
+
+        }
+
+        return result;
     }
 
+    // TODO: More requirements from algorithm team
+    public int CreateSession(string sessionType, string algorithmType, int x,
+                             int y)
+    {
+        return 0;
+    }
+
+    public bool UpdateCell(int sessionId, int x, int y, int value)
+    {
+        return true;
+    }
+
+    public string GetCell(int sessionId, int x, int y) { return string.Empty; }
+
+    public string[,] GetMaze(int sessionId) { return new string[1, 1]; }
+
+    public void AddCommand(int sessionId, string command) { }
+
+    #region UNDONE Work
     /// <summary>
     /// return the type of the object in maze according to coordinates
     /// </summary>
@@ -258,6 +368,7 @@ public class DataBaseManager {
         }
         return new int[step, 2];
     }
+
     /// <summary>
     /// return the sepecific path according to id
     /// </summary>
@@ -285,30 +396,6 @@ public class DataBaseManager {
                 res[step, 1] = y;
             }
         }
-
-        return res;
-    }
-
-    /// <summary>
-    /// return the sensor according to id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public string getSensorByID(int id) {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("Comment");
-        string tableName = "Sensor";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
-
-        dataReader =
-            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        string res = "";
-        if (dataReader.Read()) {
-            res = dataReader.GetString(0);
-        }
-
         return res;
     }
 
@@ -324,7 +411,6 @@ public class DataBaseManager {
         string tableName = "Commands";
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add("ID", id.ToString());
-
         dataReader =
             ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string[] res = new string[0];
@@ -361,25 +447,6 @@ public class DataBaseManager {
         }
         return res;
     }
-
-    /*
-     * New requirement from algorithm team
-     */
-
-    public int CreateSession(string sessionType, string algorithmType, int x,
-                             int y) {
-        return 0;
-    }
-
-    public bool UpdateCell(int sessionId, int x, int y, int value) {
-        return true;
-    }
-
-    public string GetCell(int sessionId, int x, int y) { return string.Empty; }
-
-    public string[, ] GetMaze(int sessionId) { return new string[1, 1]; }
-
-    public void AddCommand(int sessionId, string command) {}
 #endregion
 
     /// <summary>
@@ -408,7 +475,9 @@ public class DataBaseManager {
     /// </summary>
     /// <param name="queryString"></param>
     /// <returns></returns>
-    private SqliteDataReader ExecuteQuery(string queryString) {
+    private SqliteDataReader ExecuteQuery(string queryString)
+    {
+        Debug.Log(queryString);
         dbCommand = dbConnection.CreateCommand();
         dbCommand.CommandText = queryString;
         Debug.Log(queryString);
@@ -451,16 +520,10 @@ public class DataBaseManager {
     /// <param name="nodes"></param>
     /// <param name="edges"></param>
     /// <returns></returns>
-    private bool errorCheckMaze(int id, int[] nodes, string[, ] edges) {
-        if (id < 0) // Check ID
+    private bool errorCheckMaze(int id, string[,] edges)
+    {
+        if (id < 0)                                      //Check ID
             return true;
-
-        for (int i = 0; i < nodes.Length; i++) // Check nodes
-        {
-            if (nodes[i] < 0)
-                return true;
-        }
-
         List<string> directionList = new List<string>();
         directionList.Add("N");
         directionList.Add("S");
@@ -476,9 +539,7 @@ public class DataBaseManager {
             else if (!directionList.Contains(edges[i, 2]))
                 return true;
         }
-
         return false;
     }
-
 #endregion
 }

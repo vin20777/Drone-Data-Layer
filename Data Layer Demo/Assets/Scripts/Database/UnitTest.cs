@@ -18,8 +18,10 @@ public class UnitTest : MonoBehaviour {
         dbm.ConnectToDB("Rover.db");
         TestInsertMaze();
         TestUpdateMaze();
-        TestGetMazeById();
+        //TestGetMazeById();
         TestDeleteMazeById();
+        TestInsertSensor();
+        TestGetSensor();
     }
 
     void TestInsertMaze() {
@@ -27,7 +29,7 @@ public class UnitTest : MonoBehaviour {
         string[, ] edges = new string[4, 3]{
             {"1", "3", "S"}, {"2", "3", "N"}, {"2", "4", "W"}, {"3", "4", "E"}};
         mazeUid = provideUid();
-        int resultCode = dbm.InsertMazeRecord(mazeUid, nodes, edges);
+        int resultCode = dbm.InsertMazeRecord(mazeUid, edges);
         Debug.Log("Insert Maze Result:" +
                   (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
                    : "Failure"));
@@ -42,6 +44,7 @@ public class UnitTest : MonoBehaviour {
     }
 
     void TestGetMazeById() {
+        mazeUid = 37887891;
         var arr = dbm.GetMazeById(mazeUid);
 
         int rowLength = arr.GetLength(0);
@@ -65,6 +68,28 @@ public class UnitTest : MonoBehaviour {
         Debug.Log("Delete Maze Result:" +
                   (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
                    : "Failure"));
+    }
+
+    void TestInsertSensor()
+    {
+        int[,] matrix = new int[4, 4] { { 1, 2, 3,4 }, { 2, 3, 4,5 }, { 3, 4, 5,6 },{ 5, 6, 7, 8 } };
+
+        int resultCode = dbm.SetSensorMatrixById(10, matrix);
+        Debug.Log("Insert Sensor Result:" +
+                  (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
+                   : "Failure"));
+    }
+
+    void TestGetSensor()
+    {
+        int[,] matrix = dbm.GetSensorMatrixById(10);
+        for (int i = 0; i <= matrix.GetUpperBound(0); i++)
+        {
+            for(int j = 0; j <= matrix.GetUpperBound(1); j++)
+            {
+                Debug.Log(matrix[i, j] + ",");
+            }
+        }
     }
 
     private int provideUid() {
