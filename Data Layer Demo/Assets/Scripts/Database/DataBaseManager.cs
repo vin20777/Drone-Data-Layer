@@ -60,45 +60,45 @@ public class DataBaseManager {
     // TODO: NEW requirements from algorithm team
     public int CreateExploredMaze(int mazeId, int[,] exploredMaze)
     {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public int UpdateMaze(int[,] updatedMaze)
     {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public int UpdateCoverage(float mazeCoverage)
     {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public int UpdateTimeTaken(int second)
     {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public int UpdateMoveHistory(String[] path)
     {
-        return 0;
+        throw new NotImplementedException();
     }
 
     public int UpdatePoints(int points)
     {
-        return 0;
+        throw new NotImplementedException();
     }
     #endregion
 
-#region Sensor Team
+    #region Sensor Team
     /// SetSensorMatrixById
     /// <summary>
     /// Set the environment record by the sensor.
     /// Could be any size.
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="sensorId"></param>
     /// /// <param name="matrix"></param>
     /// <returns></returns>
-    public int SetSensorMatrixById(int id, int[,] matrix)
+    public int SetSensorMatrixById(int sensorId, int[,] matrix)
     {
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
@@ -132,7 +132,7 @@ public class DataBaseManager {
             str += "'";
 
             value.Clear();
-            value.Add(id.ToString());
+            value.Add(sensorId.ToString());
             value.Add(str);
             //Debug.Log(str);
 
@@ -154,16 +154,16 @@ public class DataBaseManager {
     /// <summary>
     /// return the sensor according to id
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="sensorId"></param>
     /// <returns></returns>
-    public int[,] GetSensorMatrixById(int id)
+    public int[,] GetSensorMatrixById(int sensorId)
     {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("Content");
         string tableName = Constants.TABLE_SENSOR;
         Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
+        condition.Add("ID", sensorId.ToString());
         dataReader =
             ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string res = "";

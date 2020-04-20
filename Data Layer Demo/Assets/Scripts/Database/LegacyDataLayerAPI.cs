@@ -290,63 +290,63 @@ public class LegacyDataLayerAPI
         return result;
     }
 
-    /// <summary>
-    /// First API: Insert Maze Record.
-    /// Parameters: int id, string[,] edges
-    /// Return Type: int (Success or Failure)
-    /// Team may use: Algorithm
-    /// Definition: Pass an unique id and the maze to store.
-    /// </summary>
-    /// <param name="edges"></param>
-    public int InsertMazeRecord(int id, string[,] edges)
-    {
-        // sample data: 
-        // nodes = new int [4] {1, 2, 3, 4};
-        // edges = new int [4, 3]{
-        // {'1','2','E'}, {'1','4','N'}, {'2','3','W'}, {'3','4','S'}
-        //};
+    ///// <summary>
+    ///// First API: Insert Maze Record.
+    ///// Parameters: int id, string[,] edges
+    ///// Return Type: int (Success or Failure)
+    ///// Team may use: Algorithm
+    ///// Definition: Pass an unique id and the maze to store.
+    ///// </summary>
+    ///// <param name="edges"></param>
+    //public int InsertMazeRecord(int id, string[,] edges)
+    //{
+    //    // sample data: 
+    //    // nodes = new int [4] {1, 2, 3, 4};
+    //    // edges = new int [4, 3]{
+    //    // {'1','2','E'}, {'1','4','N'}, {'2','3','W'}, {'3','4','S'}
+    //    //};
 
-        SqlEncap sql = new SqlEncap();
-        int result = Constants.RESPONSE_CODE_SUCCESS;
-        if (errorCheckMaze(id, edges))
-        {
-            result = Constants.RESPONSE_CODE_FAILURE;
-            return result;
-        }
+    //    SqlEncap sql = new SqlEncap();
+    //    int result = Constants.RESPONSE_CODE_SUCCESS;
+    //    if (errorCheckMaze(id, edges))
+    //    {
+    //        result = Constants.RESPONSE_CODE_FAILURE;
+    //        return result;
+    //    }
 
-        List<string> columnName = new List<string>();
-        List<string> value = new List<string>();
+    //    List<string> columnName = new List<string>();
+    //    List<string> value = new List<string>();
 
-        try
-        {
-            columnName.Add(Constants.COLUMN_ID);
-            columnName.Add(Constants.COLUMN_NODE);
-            columnName.Add(Constants.COLUMN_CONNECTTO);
-            columnName.Add(Constants.COLUMN_DIRECTION);
-            columnName.Add(Constants.COLUMN_DESCRIPTION);
+    //    try
+    //    {
+    //        columnName.Add(Constants.COLUMN_ID);
+    //        columnName.Add(Constants.COLUMN_NODE);
+    //        columnName.Add(Constants.COLUMN_CONNECTTO);
+    //        columnName.Add(Constants.COLUMN_DIRECTION);
+    //        columnName.Add(Constants.COLUMN_DESCRIPTION);
 
-            for (int i = 0; i < edges.GetLength(0); i++)
-            {
-                value.Clear();
-                value.Add(id.ToString());
-                value.Add(edges[i, 0]);
-                value.Add(edges[i, 1]);
-                value.Add("'" + edges[i, 2] + "'");
-                value.Add("'Description'");
+    //        for (int i = 0; i < edges.GetLength(0); i++)
+    //        {
+    //            value.Clear();
+    //            value.Add(id.ToString());
+    //            value.Add(edges[i, 0]);
+    //            value.Add(edges[i, 1]);
+    //            value.Add("'" + edges[i, 2] + "'");
+    //            value.Add("'Description'");
 
-                dbCommand = dbConnection.CreateCommand();
-                dbCommand.CommandText =
-                    sql.Insert(Constants.TABLE_MAZE, columnName, value);
-                dbCommand.ExecuteNonQuery();
-            }
-        }
-        catch (SqliteException sqlEx)
-        {
-            result = Constants.RESPONSE_CODE_FAILURE;
-            Debug.LogError(sqlEx);
-        }
-        return result;
-    }
+    //            dbCommand = dbConnection.CreateCommand();
+    //            dbCommand.CommandText =
+    //                sql.Insert(Constants.TABLE_MAZE, columnName, value);
+    //            dbCommand.ExecuteNonQuery();
+    //        }
+    //    }
+    //    catch (SqliteException sqlEx)
+    //    {
+    //        result = Constants.RESPONSE_CODE_FAILURE;
+    //        Debug.LogError(sqlEx);
+    //    }
+    //    return result;
+    //}
 
     #region UNDONE Work
     /// <summary>

@@ -31,64 +31,54 @@ public class UnitTest : MonoBehaviour {
     }
 
     void TestCreateExploredMaze() {
-        int[] nodes = new int[4]{1, 2, 3, 4};
-        string[, ] edges = new string[4, 3]{
-            {"1", "3", "S"}, {"2", "3", "N"}, {"2", "4", "W"}, {"3", "4", "E"}};
-        mazeUid = provideUid();
-        int resultCode = dbm.InsertMazeRecord(mazeUid, edges);
-        Debug.Log("Insert Maze Result:" +
-                  (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
-                   : "Failure"));
+        //int[] nodes = new int[4]{1, 2, 3, 4};
+        //string[, ] edges = new string[4, 3]{
+        //    {"1", "3", "S"}, {"2", "3", "N"}, {"2", "4", "W"}, {"3", "4", "E"}};
+        //mazeUid = provideUid();
+        //int resultCode = dbm.InsertMazeRecord(mazeUid, edges);
+        //Debug.Log("Insert Maze Result:" +
+        //          (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
+        //           : "Failure"));
     }
 
     void TestUpdateMaze() {
-        string[] edges = new string[3]{"1", "3", "E"};
-        int resultCode = dbm.UpdateMazeDirection(mazeUid, edges);
-        Debug.Log("Update Maze Result:" +
-                  (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
-                   : "Failure"));
+        //string[] edges = new string[3]{"1", "3", "E"};
+        //int resultCode = dbm.UpdateMazeDirection(mazeUid, edges);
+        //Debug.Log("Update Maze Result:" +
+        //          (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
+        //           : "Failure"));
     }
 
     void TestGetMazeById() {
-        mazeUid = 37887891;
-        var arr = dbm.GetMazeById(mazeUid);
+        //mazeUid = 37887891;
+        //var arr = dbm.GetMazeById(mazeUid);
 
-        int rowLength = arr.GetLength(0);
-        int colLength = arr[0].Length;
+        //int rowLength = arr.GetLength(0);
+        //int colLength = arr[0].Length;
 
-        Debug.Log("Get Maze Result:");
+        //Debug.Log("Get Maze Result:");
 
-        for (int i = 0; i < rowLength; i++) {
-            string str = String.Empty;
-            for (int j = 0; j < colLength; j++) {
-                str += arr [i]
-                       [j] +
-                       " ";
-            }
-            Debug.Log(str);
-        }
+        //for (int i = 0; i < rowLength; i++) {
+        //    string str = String.Empty;
+        //    for (int j = 0; j < colLength; j++) {
+        //        str += arr [i]
+        //               [j] +
+        //               " ";
+        //    }
+        //    Debug.Log(str);
+        //}
     }
 
     void TestUpdateCoverage() {
-        int resultCode = dbm.DeleteMazeById(mazeUid);
-        Debug.Log("Delete Maze Result:" +
-                  (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
-                   : "Failure"));
-    }
-
-    void TestInsertSensor()
-    {
-        int[,] matrix = new int[4, 4] { { 1, 2, 3,4 }, { 2, 3, 4,5 }, { 3, 4, 5,6 },{ 5, 6, 7, 8 } };
-
-        int resultCode = dbm.SetSensorMatrixById(10, matrix);
-        Debug.Log("Insert Sensor Result:" +
-                  (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
-                   : "Failure"));
+        //int resultCode = dbm.DeleteMazeById(mazeUid);
+        //Debug.Log("Delete Maze Result:" +
+        //          (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
+        //           : "Failure"));
     }
 
     void TestUpdateTimeTaken()
     {
-
+        
     }
 
     void TestUpdateMoveHistory()
@@ -99,6 +89,16 @@ public class UnitTest : MonoBehaviour {
     void TestUpdatePoints()
     {
 
+    }
+
+    void TestInsertSensor()
+    {
+        int[,] matrix = new int[4, 4] { { 1, 2, 3, 4 }, { 2, 3, 4, 5 }, { 3, 4, 5, 6 }, { 5, 6, 7, 8 } };
+
+        int resultCode = dbm.SetSensorMatrixById(10, matrix);
+        Debug.Log("Insert Sensor Result:" +
+                  (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
+                   : "Failure"));
     }
 
     void TestGetSensor()
@@ -119,7 +119,7 @@ public class UnitTest : MonoBehaviour {
                            .AddMinutes(now.Minute)
                            .AddSeconds(now.Second)
                            .AddMilliseconds(now.Millisecond);
-        int uniqueId = (int)(zeroDate.Ticks / 10000);
+        int uniqueId = (int)(zeroDate.Ticks / 10000) % 10000;
         return uniqueId;
     }
 }
