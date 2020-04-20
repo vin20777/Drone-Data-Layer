@@ -86,32 +86,32 @@ public class DatabaseTest : MonoBehaviour
         else if (dp.captionText.text.Equals("InsertMazeRecord"))
         {
 
-            // format: 1,4,S;2,3,N;3,4,W
-            string[] temp = text2.text.Split(';');
-            string[,] edges = new string[temp.Length, 3];
+            //// format: 1,4,S;2,3,N;3,4,W
+            //string[] temp = text2.text.Split(';');
+            //string[,] edges = new string[temp.Length, 3];
             
-            for(int i = 0; i < temp.Length; i++)
-            {
-                string[] values = temp[i].Split(',');
-                edges[i, 0] = values[0].ToString();
-                edges[i, 1] = values[1].ToString();
-                edges[i, 2] = values[2].ToString();
-            }
-            db.InsertMazeRecord(int.Parse(text1.text), edges);
-            text2.placeholder.GetComponent<Text>().text = string.Empty;
-            this.AlwaysDisplayMazeRecord();
+            //for(int i = 0; i < temp.Length; i++)
+            //{
+            //    string[] values = temp[i].Split(',');
+            //    edges[i, 0] = values[0].ToString();
+            //    edges[i, 1] = values[1].ToString();
+            //    edges[i, 2] = values[2].ToString();
+            //}
+            //db.InsertMazeRecord(int.Parse(text1.text), edges);
+            //text2.placeholder.GetComponent<Text>().text = string.Empty;
+            //this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("UpdateMazeDirection"))
         {
-            string[] temp = text2.text.Split(',');
-            int res = db.UpdateMazeDirection(int.Parse(text1.text), temp);
-            text2.placeholder.GetComponent<Text>().text = string.Empty;
-            this.AlwaysDisplayMazeRecord();
+            //string[] temp = text2.text.Split(',');
+            //int res = db.UpdateMazeDirection(int.Parse(text1.text), temp);
+            //text2.placeholder.GetComponent<Text>().text = string.Empty;
+            //this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("DeleteMazeById"))
         {
-            int res = db.DeleteMazeById(int.Parse(text1.text));
-            this.AlwaysDisplayMazeRecord();
+            //int res = db.DeleteMazeById(int.Parse(text1.text));
+            //this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("SetSensorMatrixById"))
         {
