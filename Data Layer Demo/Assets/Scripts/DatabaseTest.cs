@@ -86,36 +86,38 @@ public class DatabaseTest : MonoBehaviour
         else if (dp.captionText.text.Equals("InsertMazeRecord"))
         {
 
-            // format: 1,4,S;2,3,N;3,4,W
-            string[] temp = text2.text.Split(';');
-            string[,] edges = new string[temp.Length, 3];
+            //// format: 1,4,S;2,3,N;3,4,W
+            //string[] temp = text2.text.Split(';');
+            //string[,] edges = new string[temp.Length, 3];
             
-            for(int i = 0; i < temp.Length; i++)
-            {
-                string[] values = temp[i].Split(',');
-                edges[i, 0] = values[0].ToString();
-                edges[i, 1] = values[1].ToString();
-                edges[i, 2] = values[2].ToString();
-            }
-            db.InsertMazeRecord(int.Parse(text1.text), edges);
-            text2.placeholder.GetComponent<Text>().text = string.Empty;
-            this.AlwaysDisplayMazeRecord();
+            //for(int i = 0; i < temp.Length; i++)
+            //{
+            //    string[] values = temp[i].Split(',');
+            //    edges[i, 0] = values[0].ToString();
+            //    edges[i, 1] = values[1].ToString();
+            //    edges[i, 2] = values[2].ToString();
+            //}
+            //db.InsertMazeRecord(int.Parse(text1.text), edges);
+            //text2.placeholder.GetComponent<Text>().text = string.Empty;
+            //this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("UpdateMazeDirection"))
         {
-            string[] temp = text2.text.Split(',');
-            int res = db.UpdateMazeDirection(int.Parse(text1.text), temp);
-            text2.placeholder.GetComponent<Text>().text = string.Empty;
-            this.AlwaysDisplayMazeRecord();
+            //string[] temp = text2.text.Split(',');
+            //int res = db.UpdateMazeDirection(int.Parse(text1.text), temp);
+            //text2.placeholder.GetComponent<Text>().text = string.Empty;
+            //this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("DeleteMazeById"))
         {
-            int res = db.DeleteMazeById(int.Parse(text1.text));
-            this.AlwaysDisplayMazeRecord();
+            //int res = db.DeleteMazeById(int.Parse(text1.text));
+            //this.AlwaysDisplayMazeRecord();
         }
         else if (dp.captionText.text.Equals("SetSensorMatrixById"))
         {
-            int id = int.Parse(text1.text);
+            string[] str = text1.text.Split(',');
+            int timestamp = int.Parse(str[0]);
+            int id = int.Parse(str[1]);
 
             string[] split1 = text2.text.Split(';');
             int num1 = split1.Length;
@@ -131,7 +133,7 @@ public class DatabaseTest : MonoBehaviour
 
             }
 
-            int resultCode = db.SetSensorMatrixById(id, matrix);
+            int resultCode = db.SetSensorMatrixById(timestamp, id, matrix);
 
             outputtext.text = "Insert Sensor Result:" +
                   (resultCode == 1 ? "Success"
@@ -139,7 +141,10 @@ public class DatabaseTest : MonoBehaviour
         }
         else if (dp.captionText.text.Equals("GetSensorMatrixById"))
         {
-            int[,] matrix = db.GetSensorMatrixById(int.Parse(text1.text));
+            string[] input = text1.text.Split(',');
+            int id = int.Parse(input[0]);
+            int timestamp = int.Parse(input[1]);
+            int[,] matrix = db.GetSensorMatrixById(id, timestamp);
             string str = "";
             for (int i = 0; i <= matrix.GetUpperBound(0); i++)
             {
@@ -233,19 +238,21 @@ public class DatabaseTest : MonoBehaviour
                 text2.text = string.Empty;
                 break;
             case 6:
-                dataformat.text = "This method has 2 inputs: id, matrix";
-                field1.text = "Id:";
+                dataformat.text = "This method has 2 inputs: timestamp and id, matrix";
+                field1.text = "TimeStamp and Id:";
                 field2.text = "Matrix: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
+                text1.placeholder.GetComponent<Text>().text = "format: 20200420,1";
                 text2.placeholder.GetComponent<Text>().text = "format: 1,2,3;2,3,4;3,4,5";
                 break;
             case 7:
-                dataformat.text = "This method has 1 input: id";
+                dataformat.text = "This method has 1 input: id and timestamp";
                 field1.text = "Id:";
                 field2.text = "Do Not Input: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
+                text1.placeholder.GetComponent<Text>().text = "format: 1,20200420";
                 break;
         }
     }
