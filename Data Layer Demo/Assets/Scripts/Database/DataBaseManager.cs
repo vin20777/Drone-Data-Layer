@@ -98,7 +98,7 @@ public class DataBaseManager {
     /// <param name="sensorId"></param>
     /// /// <param name="matrix"></param>
     /// <returns></returns>
-    public int SetSensorMatrixById(int sensorId, int[,] matrix)
+    public int SetSensorMatrixById(int timestamp, int sensorId, int[,] matrix)
     {
         SqlEncap sql = new SqlEncap();
         int result = Constants.RESPONSE_CODE_SUCCESS;
@@ -108,6 +108,7 @@ public class DataBaseManager {
 
         try
         {
+            columnName.Add(Constants.SENSOR_TIMESTAMP);
             columnName.Add(Constants.COLUMN_ID);
             columnName.Add(Constants.SENSOR_CONTENT);
 
@@ -132,6 +133,7 @@ public class DataBaseManager {
             str += "'";
 
             value.Clear();
+            value.Add(timestamp.ToString());
             value.Add(sensorId.ToString());
             value.Add(str);
             //Debug.Log(str);
@@ -156,14 +158,15 @@ public class DataBaseManager {
     /// </summary>
     /// <param name="sensorId"></param>
     /// <returns></returns>
-    public int[,] GetSensorMatrixById(int sensorId)
+    public int[,] GetSensorMatrixById(int sensorId, int timestamp)
     {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
         selectvalue.Add("Content");
         string tableName = Constants.TABLE_SENSOR;
         Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", sensorId.ToString());
+        condition.Add(Constants.COLUMN_ID, sensorId.ToString());
+        condition.Add(Constants.SENSOR_TIMESTAMP, timestamp.ToString());
         dataReader =
             ExecuteQuery(sql.Select(selectvalue, tableName, condition));
         string res = "";

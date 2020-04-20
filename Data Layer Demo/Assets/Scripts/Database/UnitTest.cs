@@ -95,7 +95,7 @@ public class UnitTest : MonoBehaviour {
     {
         int[,] matrix = new int[4, 4] { { 1, 2, 3, 4 }, { 2, 3, 4, 5 }, { 3, 4, 5, 6 }, { 5, 6, 7, 8 } };
 
-        int resultCode = dbm.SetSensorMatrixById(10, matrix);
+        int resultCode = dbm.SetSensorMatrixById(20200420, 10, matrix);
         Debug.Log("Insert Sensor Result:" +
                   (resultCode == Constants.RESPONSE_CODE_SUCCESS ? "Success"
                    : "Failure"));
@@ -103,7 +103,7 @@ public class UnitTest : MonoBehaviour {
 
     void TestGetSensor()
     {
-        int[,] matrix = dbm.GetSensorMatrixById(10);
+        int[,] matrix = dbm.GetSensorMatrixById(10, 20200420);
         for (int i = 0; i <= matrix.GetUpperBound(0); i++)
         {
             for(int j = 0; j <= matrix.GetUpperBound(1); j++)
