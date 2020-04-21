@@ -142,8 +142,8 @@ public class DatabaseTest : MonoBehaviour
         else if (dp.captionText.text.Equals("GetSensorMatrixById"))
         {
             string[] input = text1.text.Split(',');
-            int id = int.Parse(input[0]);
-            int timestamp = int.Parse(input[1]);
+            int timestamp = int.Parse(input[0]);
+            int id = int.Parse(input[1]);
             int[,] matrix = db.GetSensorMatrixById(id, timestamp);
             string str = "";
             for (int i = 0; i <= matrix.GetUpperBound(0); i++)
@@ -239,12 +239,12 @@ public class DatabaseTest : MonoBehaviour
                 break;
             case 6:
                 dataformat.text = "This method has 2 inputs: timestamp and id, matrix";
-                field1.text = "TimeStamp and Id:";
+                field1.text = "Id and TimeStamp:";
                 field2.text = "Matrix: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
-                text1.placeholder.GetComponent<Text>().text = "format: 20200420,1";
-                text2.placeholder.GetComponent<Text>().text = "format: 1,2,3;2,3,4;3,4,5";
+                text1.placeholder.GetComponent<Text>().text = "format: 1,20200420";
+                text2.placeholder.GetComponent<Text>().text = "format: -1,1,1;1,2,1;1,1,-1";
                 break;
             case 7:
                 dataformat.text = "This method has 1 input: id and timestamp";
