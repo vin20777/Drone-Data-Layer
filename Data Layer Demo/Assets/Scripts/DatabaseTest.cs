@@ -167,8 +167,8 @@ public class DatabaseTest : MonoBehaviour
         else if (dp.captionText.text.Equals("SetSensorMatrixById"))
         {
             string[] str = text1.text.Split(',');
-            int timestamp = int.Parse(str[0]);
-            int id = int.Parse(str[1]);
+            int timestamp = int.Parse(str[1]);
+            int id = int.Parse(str[0]);
 
             string[] split1 = text2.text.Split(';');
             int num1 = split1.Length;
@@ -193,8 +193,8 @@ public class DatabaseTest : MonoBehaviour
         else if (dp.captionText.text.Equals("GetSensorMatrixById"))
         {
             string[] input = text1.text.Split(',');
-            int timestamp = int.Parse(input[0]);
-            int id = int.Parse(input[1]);
+            int timestamp = int.Parse(input[1]);
+            int id = int.Parse(input[0]);
             int[,] matrix = db.GetSensorMatrixById(id, timestamp);
             string str = "";
             for (int i = 0; i <= matrix.GetUpperBound(0); i++)
@@ -325,16 +325,7 @@ public class DatabaseTest : MonoBehaviour
                 text2.placeholder.GetComponent<Text>().text = "example: 1000";
                 text1.enabled = false;
                 break;
-            case 9:    //set sensor
-                dataformat.text = "This method has 2 inputs: timestamp and id, matrix";
-                field1.text = "Id and TimeStamp:";
-                field2.text = "Matrix: ";
-                text1.text = string.Empty;
-                text2.text = string.Empty;
-                text1.placeholder.GetComponent<Text>().text = "format: 1,20200420";
-                text2.placeholder.GetComponent<Text>().text = "format: -1,1,1;1,2,1;1,1,-1";
-                break;
-            case 10:    //get sensor
+            case 9:    //get sensor
                 dataformat.text = "This method has 1 input: id and timestamp";
                 field1.text = "Id and TimeStamp:";
                 field2.text = "Do Not Input: ";
@@ -342,6 +333,15 @@ public class DatabaseTest : MonoBehaviour
                 text2.text = string.Empty;
                 text1.placeholder.GetComponent<Text>().text = "format: 1,20200420";
                 text2.enabled = false;
+                break;
+            case 10:    //set sensor
+                dataformat.text = "This method has 2 inputs: timestamp and id, matrix";
+                field1.text = "Id and TimeStamp:";
+                field2.text = "Matrix: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
+                text1.placeholder.GetComponent<Text>().text = "format: 1,20200420";
+                text2.placeholder.GetComponent<Text>().text = "format: -1,1,1;1,2,1;1,1,-1";
                 break;
         }
     }
