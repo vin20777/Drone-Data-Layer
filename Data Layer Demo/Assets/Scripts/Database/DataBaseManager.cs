@@ -32,7 +32,7 @@ public class DataBaseManager {
 
     #region Algorithm Team
     /// <summary>
-    /// This method is to get back maze record by Id
+    /// This method is to get back maze matrix by Id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -66,7 +66,12 @@ public class DataBaseManager {
         return result;
     }
 
-    // TODO: NEW requirements from algorithm team
+    /// <summary>
+    /// Create a new maze by id and matrix
+    /// </summary>
+    /// <param name="mazeId"></param>
+    /// <param name="exploredMaze"></param>
+    /// <returns></returns>
     public int CreateExploredMaze(int mazeId, int[,] exploredMaze)
     {
         actived_mazeId = mazeId;
@@ -118,6 +123,11 @@ public class DataBaseManager {
         return result;
     }
 
+    /// <summary>
+    /// Update maze matrix
+    /// </summary>
+    /// <param name="updatedMaze"></param>
+    /// <returns></returns>
     public int UpdateMaze(int[,] updatedMaze)
     {
         SqlEncap sql = new SqlEncap();
@@ -166,6 +176,11 @@ public class DataBaseManager {
         return result;
     }
 
+    /// <summary>
+    /// Update maze coverage
+    /// </summary>
+    /// <param name="mazeCoverage"></param>
+    /// <returns></returns>
     public int UpdateCoverage(float mazeCoverage)
     {
         SqlEncap sql = new SqlEncap();
@@ -194,6 +209,11 @@ public class DataBaseManager {
         return result;
     }
 
+    /// <summary>
+    /// Update maze time taken
+    /// </summary>
+    /// <param name="second"></param>
+    /// <returns></returns>
     public int UpdateTimeTaken(int second)
     {
         SqlEncap sql = new SqlEncap();
@@ -222,6 +242,11 @@ public class DataBaseManager {
         return result;
     }
 
+    /// <summary>
+    /// Update maze move history
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
     public int UpdateMoveHistory(String[] path)
     {
         SqlEncap sql = new SqlEncap();
@@ -261,6 +286,11 @@ public class DataBaseManager {
         return result;
     }
 
+    /// <summary>
+    /// Update maze points
+    /// </summary>
+    /// <param name="points"></param>
+    /// <returns></returns>
     public int UpdatePoints(int points)
     {
         SqlEncap sql = new SqlEncap();
