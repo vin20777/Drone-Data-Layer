@@ -109,17 +109,60 @@ public class DatabaseTest : MonoBehaviour
                   (resultCode == 1 ? "Success"
                    : "Failure");
         }
-        else if (dp.captionText.text.Equals("UpdateMazeDirection"))
+        else if (dp.captionText.text.Equals("UpdateMaze"))
         {
-            //string[] temp = text2.text.Split(',');
-            //int res = db.UpdateMazeDirection(int.Parse(text1.text), temp);
-            //text2.placeholder.GetComponent<Text>().text = string.Empty;
-            //this.AlwaysDisplayMazeRecord();
+            string[] split1 = text2.text.Split(';');
+            int num1 = split1.Length;
+            int num2 = split1[0].Split(',').Length;
+            int[,] matrix = new int[num1, num2];
+            for (int i = 0; i < split1.Length; i++)
+            {
+                string[] split2 = split1[i].Split(',');
+                for (int j = 0; j < split2.Length; j++)
+                {
+                    matrix[i, j] = Convert.ToInt32(split2[j]);
+                }
+
+            }
+
+            int resultCode = db.UpdateMaze(matrix);
+
+            outputtext.text = "Update Maze Result:" +
+                  (resultCode == 1 ? "Success"
+                   : "Failure");
         }
-        else if (dp.captionText.text.Equals("DeleteMazeById"))
+        else if (dp.captionText.text.Equals("UpdateCoverage"))
         {
-            //int res = db.DeleteMazeById(int.Parse(text1.text));
-            //this.AlwaysDisplayMazeRecord();
+            int resultCode = db.UpdateCoverage(float.Parse(text2.text));
+
+            outputtext.text = "Update Maze Coverage Result:" +
+                  (resultCode == 1 ? "Success"
+                   : "Failure");
+        }
+        else if (dp.captionText.text.Equals("UpdateTimeTaken"))
+        {
+            int resultCode = db.UpdateTimeTaken(int.Parse(text2.text));
+
+            outputtext.text = "Update Maze Time Taken Result:" +
+                  (resultCode == 1 ? "Success"
+                   : "Failure");
+        }
+        else if (dp.captionText.text.Equals("UpdateMoveHistory"))
+        {
+            string[] strArray = text2.text.Split(',');
+            int resultCode = db.UpdateMoveHistory(strArray);
+
+            outputtext.text = "Update Maze Move History Result:" +
+                  (resultCode == 1 ? "Success"
+                   : "Failure");
+        }
+        else if (dp.captionText.text.Equals("UpdatePoints"))
+        {
+            int resultCode = db.UpdatePoints(int.Parse(text2.text));
+
+            outputtext.text = "Update Maze Points Result:" +
+                  (resultCode == 1 ? "Success"
+                   : "Failure");
         }
         else if (dp.captionText.text.Equals("SetSensorMatrixById"))
         {
@@ -199,30 +242,37 @@ public class DatabaseTest : MonoBehaviour
 
     public void OnValueChange(int value)
     {
+        text1.enabled = true;
+        text2.enabled = true;
         switch (value)
         {          
-            case 0:
+            case 0:    //null
                 dataformat.text = string.Empty;
                 field1.text = "Input parameter 1:";
                 field2.text = "Input parameter 2:";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
+                text1.enabled = false;
+                text2.enabled = false;
                 break;
-            case 1:
+            case 1:    //get all maze record
                 dataformat.text = "This method has 0 input";
                 field1.text = "Do Not Input: ";
                 field2.text = "Do Not Input: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
+                text1.enabled = false;
+                text2.enabled = false;
                 break;
-            case 2:
+            case 2:    //get maze by id
                 dataformat.text = "This method has 1 input: id";
                 field1.text = "Id:";
                 field2.text = "Do Not Input: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
+                text2.enabled = false;
                 break;
-            case 3:
+            case 3:    //create maze
                 dataformat.text = "This method has 2 inputs: id, matrix";
                 field1.text = "Id:";
                 field2.text = "Matrix: ";
@@ -230,22 +280,52 @@ public class DatabaseTest : MonoBehaviour
                 text2.text = string.Empty;
                 text2.placeholder.GetComponent<Text>().text = "format: -1,1,1;1,2,1;1,1,-1";
                 break;
-            case 4:
-                dataformat.text = "This method has 2 inputs: id, edge";
-                field1.text = "Id:";
-                field2.text = "Edge: ";
+            case 4:     //update maze matrix
+                dataformat.text = "This method has 1 inputs: matrix";
+                field1.text = "Do Not Input:";
+                field2.text = "Matrix: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
-                text2.placeholder.GetComponent<Text>().text = "format: 1,3,W";
+                text2.placeholder.GetComponent<Text>().text = "format: -1,1,1;1,2,1;1,1,-1";
+                text1.enabled = false;
                 break;
-            case 5:
-                dataformat.text = "This method has 1 input: id";
-                field1.text = "Id:";
-                field2.text = "Do Not Input: ";
+            case 5:    //update maze coverage
+                dataformat.text = "This method has 1 input: maze coverage";
+                field1.text = "Do Not Input: ";
+                field2.text = "Coverage: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
+                text2.placeholder.GetComponent<Text>().text = "example: 0.8";
+                text1.enabled = false;
                 break;
-            case 6:
+            case 6:    //update maze time taken
+                dataformat.text = "This method has 1 inputs: maze time taken";
+                field1.text = "Do Not Input: ";
+                field2.text = "Time Taken: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
+                text2.placeholder.GetComponent<Text>().text = "example: 75";
+                text1.enabled = false;
+                break;
+            case 7:   //update maze move history
+                dataformat.text = "This method has 1 input: maze move history";
+                field1.text = "Do Not Input: ";
+                field2.text = "Move History: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
+                text2.placeholder.GetComponent<Text>().text = "format: North,East,West,South";
+                text1.enabled = false;
+                break;
+            case 8:   //update maze points
+                dataformat.text = "This method has 1 input: points";
+                field1.text = "Do Not Input: ";
+                field2.text = "Points: ";
+                text1.text = string.Empty;
+                text2.text = string.Empty;
+                text2.placeholder.GetComponent<Text>().text = "example: 1000";
+                text1.enabled = false;
+                break;
+            case 9:    //set sensor
                 dataformat.text = "This method has 2 inputs: timestamp and id, matrix";
                 field1.text = "Id and TimeStamp:";
                 field2.text = "Matrix: ";
@@ -254,13 +334,14 @@ public class DatabaseTest : MonoBehaviour
                 text1.placeholder.GetComponent<Text>().text = "format: 1,20200420";
                 text2.placeholder.GetComponent<Text>().text = "format: -1,1,1;1,2,1;1,1,-1";
                 break;
-            case 7:
+            case 10:    //get sensor
                 dataformat.text = "This method has 1 input: id and timestamp";
-                field1.text = "Id:";
+                field1.text = "Id and TimeStamp:";
                 field2.text = "Do Not Input: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
                 text1.placeholder.GetComponent<Text>().text = "format: 1,20200420";
+                text2.enabled = false;
                 break;
         }
     }

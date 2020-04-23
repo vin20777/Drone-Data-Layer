@@ -36,5 +36,9 @@ namespace Assets.Scripts.Database {
         public static readonly string SENSOR_TIMESTAMP = "TimeStamp";
 
         public static readonly string MAZE_MATRIX = "Matrix";
+        public static readonly string MAZE_COVERAGE = "Coverage";
+        public static readonly string MAZE_TIMETAKEN = "Timetaken";
+        public static readonly string MAZE_HISTORY = "History";
+        public static readonly string MAZE_POINTS = "Points";
     }
 }
