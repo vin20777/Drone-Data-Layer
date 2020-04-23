@@ -34,5 +34,7 @@ namespace Assets.Scripts.Database {
 
         public static readonly string SENSOR_CONTENT = "Content";
         public static readonly string SENSOR_TIMESTAMP = "TimeStamp";
+
+        public static readonly string MAZE_MATRIX = "Matrix";
     }
 }

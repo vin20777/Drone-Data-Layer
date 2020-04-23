@@ -35,32 +35,87 @@ public class DataBaseManager {
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public string[][] GetMazeById(int id) {
+    public int[,] GetMazeById(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
-        selectvalue.Add(Constants.COLUMN_NODE);
-        selectvalue.Add(Constants.COLUMN_CONNECTTO);
-        selectvalue.Add(Constants.COLUMN_DIRECTION);
-
+        selectvalue.Add(Constants.MAZE_MATRIX);
+        string tableName = Constants.TABLE_MAZE;
         Dictionary<string, string> condition = new Dictionary<string, string>();
         condition.Add(Constants.COLUMN_ID, id.ToString());
-
-        List<string[]> res = new List<string[]>();
-        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
-        while (dataReader.HasRows)
+        dataReader =
+            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
+        string res = "";
+        if (dataReader.Read())
         {
-            if (dataReader.Read())
+            res = dataReader.GetString(0);
+        }
+
+        string[] split1 = res.Split(';');
+        int num1 = split1.Length;
+        int num2 = split1[0].Split(',').Length;
+        int[,] result = new int[num1, num2];
+        for (int i = 0; i < split1.Length; i++)
+        {
+            string[] split2 = split1[i].Split(',');
+            for (int j = 0; j < split2.Length; j++)
             {
-                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+                result[i, j] = Convert.ToInt32(split2[j]);
             }
         }
-        return res.ToArray();
+        return result;
     }
 
     // TODO: NEW requirements from algorithm team
     public int CreateExploredMaze(int mazeId, int[,] exploredMaze)
     {
-        throw new NotImplementedException();
+        SqlEncap sql = new SqlEncap();
+        int result = Constants.RESPONSE_CODE_SUCCESS;
+
+        List<string> columnName = new List<string>();
+        List<string> value = new List<string>();
+
+        try
+        {
+            columnName.Add(Constants.COLUMN_ID);
+            columnName.Add(Constants.MAZE_MATRIX);
+
+            string str = "'";
+            for (int i = 0; i <= exploredMaze.GetUpperBound(0); i++)
+            {
+                str += "";
+                for (int j = 0; j <= exploredMaze.GetUpperBound(1); j++)
+                {
+                    str += exploredMaze[i, j];
+                    if (j != exploredMaze.GetUpperBound(1))
+                    {
+                        str += ",";
+                    }
+                }
+                str += "";
+                if (i != exploredMaze.GetUpperBound(0))
+                {
+                    str += ";";
+                }
+            }
+            str += "'";
+
+            value.Clear();
+            value.Add(mazeId.ToString());
+            value.Add(str);
+            //Debug.Log(str);
+
+            dbCommand = dbConnection.CreateCommand();
+            dbCommand.CommandText =
+                sql.Insert(Constants.TABLE_MAZE, columnName, value);
+            //Debug.Log(dbCommand.CommandText);
+            dbCommand.ExecuteNonQuery();
+        }
+        catch (SqliteException sqlEx)
+        {
+            result = Constants.RESPONSE_CODE_FAILURE;
+            Debug.LogError(sqlEx);
+        }
+        return result;
     }
 
     public int UpdateMaze(int[,] updatedMaze)

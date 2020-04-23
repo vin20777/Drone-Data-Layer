@@ -65,41 +65,49 @@ public class DatabaseTest : MonoBehaviour
         }
         else if (dp.captionText.text.Equals("GetMazeById"))
         {
-            string[][] arr = db.GetMazeById(int.Parse(text1.text));
+            int[,] matrix = db.GetMazeById(int.Parse(text1.text));
             outputtext.text = string.Empty;
-
-            int rowLength = arr.GetLength(0);
-            int colLength = arr[0].Length;
 
             Debug.Log("Get Maze Result:");
 
-            for (int i = 0; i < rowLength; i++)
+            string str = "";
+            for (int i = 0; i <= matrix.GetUpperBound(0); i++)
             {
-                string str = String.Empty;
-                for (int j = 0; j < colLength; j++)
+                for (int j = 0; j <= matrix.GetUpperBound(1); j++)
                 {
-                    str += arr[i][j] + " ";
+                    str += matrix[i, j];
+                    if (j != matrix.GetUpperBound(1))
+                    {
+                        str += ",";
+                    }
                 }
-                outputtext.text += str + "\n";
+                str += "\n";
             }
+            outputtext.text = str;
         }
-        else if (dp.captionText.text.Equals("InsertMazeRecord"))
+        else if (dp.captionText.text.Equals("CreateExploredMaze"))
         {
+            int id = int.Parse(text1.text);
 
-            //// format: 1,4,S;2,3,N;3,4,W
-            //string[] temp = text2.text.Split(';');
-            //string[,] edges = new string[temp.Length, 3];
-            
-            //for(int i = 0; i < temp.Length; i++)
-            //{
-            //    string[] values = temp[i].Split(',');
-            //    edges[i, 0] = values[0].ToString();
-            //    edges[i, 1] = values[1].ToString();
-            //    edges[i, 2] = values[2].ToString();
-            //}
-            //db.InsertMazeRecord(int.Parse(text1.text), edges);
-            //text2.placeholder.GetComponent<Text>().text = string.Empty;
-            //this.AlwaysDisplayMazeRecord();
+            string[] split1 = text2.text.Split(';');
+            int num1 = split1.Length;
+            int num2 = split1[0].Split(',').Length;
+            int[,] matrix = new int[num1, num2];
+            for (int i = 0; i < split1.Length; i++)
+            {
+                string[] split2 = split1[i].Split(',');
+                for (int j = 0; j < split2.Length; j++)
+                {
+                    matrix[i, j] = Convert.ToInt32(split2[j]);
+                }
+
+            }
+
+            int resultCode = db.CreateExploredMaze(id, matrix);
+
+            outputtext.text = "Create Explored Maze Result:" +
+                  (resultCode == 1 ? "Success"
+                   : "Failure");
         }
         else if (dp.captionText.text.Equals("UpdateMazeDirection"))
         {
@@ -215,12 +223,12 @@ public class DatabaseTest : MonoBehaviour
                 text2.text = string.Empty;
                 break;
             case 3:
-                dataformat.text = "This method has 2 inputs: id, edges";
+                dataformat.text = "This method has 2 inputs: id, matrix";
                 field1.text = "Id:";
-                field2.text = "Edges: ";
+                field2.text = "Matrix: ";
                 text1.text = string.Empty;
                 text2.text = string.Empty;
-                text2.placeholder.GetComponent<Text>().text = "format: 1,4,S;2,3,N;3,4,W";
+                text2.placeholder.GetComponent<Text>().text = "format: -1,1,1;1,2,1;1,1,-1";
                 break;
             case 4:
                 dataformat.text = "This method has 2 inputs: id, edge";
