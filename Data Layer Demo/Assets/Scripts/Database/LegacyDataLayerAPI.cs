@@ -47,6 +47,29 @@ public class LegacyDataLayerAPI
         throw new NotImplementedException();
     }
 
+    public string[][] GetMazeById(int id)
+    {
+        SqlEncap sql = new SqlEncap();
+        List<string> selectvalue = new List<string>();
+        selectvalue.Add(Constants.COLUMN_NODE);
+        selectvalue.Add(Constants.COLUMN_CONNECTTO);
+        selectvalue.Add(Constants.COLUMN_DIRECTION);
+
+        Dictionary<string, string> condition = new Dictionary<string, string>();
+        condition.Add(Constants.COLUMN_ID, id.ToString());
+
+        List<string[]> res = new List<string[]>();
+        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                res.Add(new string[3] { dataReader[Constants.COLUMN_NODE].ToString(), dataReader[Constants.COLUMN_CONNECTTO].ToString(), dataReader[Constants.COLUMN_DIRECTION].ToString() });
+            }
+        }
+        return res.ToArray();
+    }
+
     /// <summary>
     /// First API: Set Map Structure.
     /// Parameters: int id, int[][] maze

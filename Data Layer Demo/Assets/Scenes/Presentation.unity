@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3263,15 +3263,21 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: GetMazeById
       m_Image: {fileID: 0}
-    - m_Text: InsertMazeRecord
+    - m_Text: CreateExploredMaze
       m_Image: {fileID: 0}
-    - m_Text: UpdateMazeDirection
+    - m_Text: UpdateMaze
       m_Image: {fileID: 0}
-    - m_Text: DeleteMazeById
+    - m_Text: UpdateCoverage
       m_Image: {fileID: 0}
-    - m_Text: SetSensorMatrixById
+    - m_Text: UpdateTimeTaken
+      m_Image: {fileID: 0}
+    - m_Text: UpdateMoveHistory
+      m_Image: {fileID: 0}
+    - m_Text: UpdatePoints
       m_Image: {fileID: 0}
     - m_Text: GetSensorMatrixById
+      m_Image: {fileID: 0}
+    - m_Text: SetSensorMatrixById
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
