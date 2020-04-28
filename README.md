@@ -24,51 +24,113 @@ dbm = new DataBaseManager();
 dbm.ConnectToDB("Rover.db");
 ```
 Step 2: Use your desired APIs below.
+#### Sensor
+1. 
+```
+public int SetSensorMatrixById(int timestamp, int sensorId, int[,] matrix)
+```
+For example:<br>
+```
+int[,] matrix = new int[4, 4] { 
+{ 1, 1, 1, 1 }, 
+{ 1, 0, 0, 1 }, 
+{ 1, 0, 0, 1 }, 
+{ 1, 1, 1, 1 } 
+};
+int resultCode = dbm.SetSensorMatrixById(20200420, 2, matrix);
+```
+
+2. 
+```
+public int[,] GetSensorMatrixById(int sensorId, int timestamp)
+```
+For example:<br>
+```
+int[,] matrix = dbm.GetSensorMatrixById(2, 20200420);
+```
+
 #### Algorithm
-1. Create Explored Maze
-```C#
+3.
+```
 public int CreateExploredMaze(int mazeId, int[,] exploredMaze)
 ```
-2. Get Specific Maze
-```C#
-public int[,] GetMazeById(int mazeId)
+For example:<br>
+```
+int mazeId = 3;
+int[,] exploredMaze = new int[4, 4] { 
+{ 1, 1, -1, -1 }, 
+{ 1, 0, 0, -1 }, 
+{ 1, 0, 0, 1 }, 
+{ 1, 1, 1, 1 } 
+};
+int resultCode = dbm.CreateExploredMaze(mazeId, exploredMaze);
 ```
 
-3. Update Specific Maze
-```C#
-public int UpdateMazeById(int mazeId, int[,] updatedMaze)
+4.
+```
+public string[][] GetMazeById(int mazeId)
+```
+For example:<br>
+```
+int mazeId = 3;
+int[,] storedMaze = dbm.GetMazeById(mazeId);
 ```
 
-4. Update Maze Coverage
-```C#
-public int UpdateMazeCoverage(int mazeId, float mazeCoverage)
+5.
+```
+public int UpdateMaze(int[,] updatedMaze)
+```
+For example:<br>
+```
+int mazeId = 3;
+int[,] updatedMaze = new int[4, 4] { 
+{ 1, 1, 1, 1 }, 
+{ 1, 0, 0, 1 }, 
+{ 1, 0, 0, 1 }, 
+{ 1, 1, 1, 1 } 
+};
+int resultCode = dbm.UpdateMaze(mazeId, updatedMaze);
 ```
 
-5. Update Time Taken
-```C#
-public int UpdateTimeTaken(int mazeId, int second)
+6.
+```
+public int UpdateCoverage(float mazeCoverage)
+```
+For example:<br>
+```
+float mazeCoverage = 0.4F;
+int resultCode = dbm.UpdateCoverage(mazeCoverage);
 ```
 
-6. Update Move History
-```C#
-public int UpdateMoveHistory(int mazeId, String[ ] path)
+7.
+```
+public int UpdateTimeTaken(int second)
+```
+For example:<br>
+```
+int second = 101;
+int resultCode = dbm.UpdateTimeTaken(second);
 ```
 
-7. Update Points
-```C#
-public void UpdatePoints(int mazeId, int points)
+8.
 ```
-#### Sensor
-8. Set Sensor Matrix
-```C#
-public int setSensorMatrixById(int timestamp, int sensorId, int[,] matrix)
+public int UpdateMoveHistory(String[] path)
 ```
-
-9. Get Sensor Matrix
-```C#
-public  int[[,]] getSensorMatrixById(int sensorId)
+For example:<br>
+```
+String[] path = new String[5] { "East", "East", "North", "East", "South" };
+int resultCode = dbm.UpdateMoveHistory(path);
 ```
 
+9.
+```
+public int UpdatePoints(int points)
+```
+For example:<br>
+```
+int points = 999;
+int resultCode = dbm.UpdatePoints(points);
+```
 
 ### Demo
 Please download the demo project to see how to call and use our dll.
