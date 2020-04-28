@@ -418,136 +418,24 @@ public class DataBaseManager {
         }
         return result;
     }
-#endregion
+    #endregion
 
-    public string[][] GetAllMazeRecord()
+    public int provideUid()
     {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add(Constants.COLUMN_ID);
-        selectvalue.Add(Constants.MAZE_MATRIX);
-        selectvalue.Add(Constants.MAZE_COVERAGE);
-        selectvalue.Add(Constants.MAZE_TIMETAKEN);
-        selectvalue.Add(Constants.MAZE_HISTORY);
-        selectvalue.Add(Constants.MAZE_POINTS);
-
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-
-        List<string[]> res = new List<string[]>();
-        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
-                res.Add(new string[6] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.MAZE_MATRIX].ToString(), dataReader[Constants.MAZE_COVERAGE].ToString(), dataReader[Constants.MAZE_TIMETAKEN].ToString(), dataReader[Constants.MAZE_HISTORY].ToString(), dataReader[Constants.MAZE_POINTS].ToString() });
-            }
-        }
-        return res.ToArray();
-    }
-
-    public int[, ] getPathSize(int id) {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("count(Step)");
-        string tableName = "Path";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("SolutionID", id.ToString());
-
-        dataReader =
-            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        int step = 0;
-        if (dataReader.Read()) {
-            step = dataReader.GetInt32(0);
-        }
-        return new int[step, 2];
-    }
-
-    /// <summary>
-    /// return the sepecific path according to id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public int[, ] getPathByID(int id) {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("Step");
-        selectvalue.Add("X");
-        selectvalue.Add("Y");
-        string tableName = "Path";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("SolutionID", id.ToString());
-
-        int[, ] res = getPathSize(id);
-        dataReader =
-            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        while (dataReader.HasRows) {
-            if (dataReader.Read()) {
-                int step = dataReader.GetInt32(0) - 1;
-                int x = dataReader.GetInt32(1);
-                int y = dataReader.GetInt32(2);
-                res[step, 0] = x;
-                res[step, 1] = y;
-            }
-        }
-        return res;
-    }
-
-    /// <summary>
-    /// return the size of the commands list
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public string[] getCommandsSize(int id) {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("count(Step)");
-        string tableName = "Commands";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
-        dataReader =
-            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        string[] res = new string[0];
-        if (dataReader.Read()) {
-            int size = dataReader.GetInt32(0);
-            res = new string[size];
-        }
-        return res;
-    }
-
-    /// <summary>
-    /// return the sepecific Command according to id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public string[] getCommandByID(int id)
-    {
-        SqlEncap sql = new SqlEncap();
-        List<string> selectvalue = new List<string>();
-        selectvalue.Add("Step");
-        selectvalue.Add("Command");
-        string tableName = "Commands";
-        Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
-
-        string[] res = getCommandsSize(id);
-        dataReader =
-            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        // Debug.Log(dataReader.Read());
-        while (dataReader.HasRows)
-        {
-            if (dataReader.Read())
-            {
-                int index = dataReader.GetInt32(0) - 1;
-                res[index] = dataReader.GetString(1);
-            }
-        }
-        return res;
+        var now = DateTime.Now;
+        var zeroDate = DateTime.MinValue.AddHours(now.Hour)
+                           .AddMinutes(now.Minute)
+                           .AddSeconds(now.Second)
+                           .AddMilliseconds(now.Millisecond);
+        int uniqueId = (int)(zeroDate.Ticks / 10000) % 10000;
+        return uniqueId;
     }
 
     /// <summary>
     /// close the connection with the database
     /// </summary>
-    public void CloseConnection() {
+    public void CloseConnection()
+    {
         if (dbCommand != null) {
             dbCommand.Cancel();
         }
@@ -580,33 +468,34 @@ public class DataBaseManager {
         return dataReader;
     }
 
-    /// <summary>
-    /// Return the size of the maze according to id.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    private int[, ] getMazeSize(int id) {
+    public string[][] GetAllMazeRecord()
+    {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
-        selectvalue.Add("max(X)");
-        selectvalue.Add("max(Y)");
-        string tableName = "Maze";
+        selectvalue.Add(Constants.COLUMN_ID);
+        selectvalue.Add(Constants.MAZE_MATRIX);
+        selectvalue.Add(Constants.MAZE_COVERAGE);
+        selectvalue.Add(Constants.MAZE_TIMETAKEN);
+        selectvalue.Add(Constants.MAZE_HISTORY);
+        selectvalue.Add(Constants.MAZE_POINTS);
+
         Dictionary<string, string> condition = new Dictionary<string, string>();
-        condition.Add("ID", id.ToString());
 
-        dataReader =
-            ExecuteQuery(sql.Select(selectvalue, tableName, condition));
-        int x = 0;
-        int y = 0;
-        if (dataReader.Read()) {
-            x = dataReader.GetInt32(0) + 1;
-            y = dataReader.GetInt32(1) + 1;
+        List<string[]> res = new List<string[]>();
+        dataReader = ExecuteQuery(sql.Select(selectvalue, Constants.TABLE_MAZE, condition));
+        while (dataReader.HasRows)
+        {
+            if (dataReader.Read())
+            {
+                res.Add(new string[6] { dataReader[Constants.COLUMN_ID].ToString(), dataReader[Constants.MAZE_MATRIX].ToString(), dataReader[Constants.MAZE_COVERAGE].ToString(), dataReader[Constants.MAZE_TIMETAKEN].ToString(), dataReader[Constants.MAZE_HISTORY].ToString(), dataReader[Constants.MAZE_POINTS].ToString() });
+            }
         }
-        return new int[x, y];
+        return res.ToArray();
     }
-#endregion
 
-#region error check
+    #endregion
+
+    #region error check
     /// <summary>
     /// Check all input data for insert or update maze table
     /// </summary>
