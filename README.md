@@ -14,7 +14,7 @@
 
 ### Documentations
 Currently, **NINE** APIs are provided for accessing database (mocking data for now).
-Please see inside [the documentation](https://docs.google.com/document/d/1NfsV-xR6hWIHFi-EsfvijzKPTEMaCFKo8wXRwlO2guY/edit#) folder for more detail.
+Please see inside [the documentation](https://docs.google.com/document/d/1nIMQT8BzfyBQhaCUTyCJfjoetOdN0A5vY-i4nBbnK_g/edit) folder for more detail.
 
 
 Step 1: Create Database Manager Instance.<br>
