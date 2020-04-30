@@ -35,7 +35,9 @@ public class DataBaseManager {
     /// This method is to get back maze matrix by Id
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The 2D array of the maze.
+    /// </returns>
     public int[,] GetMazeById(int id) {
         SqlEncap sql = new SqlEncap();
         List<string> selectvalue = new List<string>();
@@ -71,7 +73,9 @@ public class DataBaseManager {
     /// </summary>
     /// <param name="mazeId"></param>
     /// <param name="exploredMaze"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The successfulness of creating explored maze.
+    /// </returns>
     public int CreateExploredMaze(int mazeId, int[,] exploredMaze)
     {
         actived_mazeId = mazeId;
@@ -127,7 +131,9 @@ public class DataBaseManager {
     /// Update maze matrix
     /// </summary>
     /// <param name="updatedMaze"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The successfulness of updating the current maze.
+    /// </returns>
     public int UpdateMaze(int[,] updatedMaze)
     {
         SqlEncap sql = new SqlEncap();
@@ -180,7 +186,9 @@ public class DataBaseManager {
     /// Update maze coverage
     /// </summary>
     /// <param name="mazeCoverage"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The successfulness of updating the maze coverage.
+    /// </returns>
     public int UpdateCoverage(float mazeCoverage)
     {
         SqlEncap sql = new SqlEncap();
@@ -213,7 +221,9 @@ public class DataBaseManager {
     /// Update maze time taken
     /// </summary>
     /// <param name="second"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The successfulness of updating the time taken.
+    /// </returns>
     public int UpdateTimeTaken(int second)
     {
         SqlEncap sql = new SqlEncap();
@@ -246,7 +256,9 @@ public class DataBaseManager {
     /// Update maze move history
     /// </summary>
     /// <param name="path"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The successfulness of updating the move history.
+    /// </returns>
     public int UpdateMoveHistory(String[] path)
     {
         SqlEncap sql = new SqlEncap();
@@ -290,7 +302,9 @@ public class DataBaseManager {
     /// Update maze points
     /// </summary>
     /// <param name="points"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The successfulness of updating the points.
+    /// </returns>
     public int UpdatePoints(int points)
     {
         SqlEncap sql = new SqlEncap();
@@ -328,7 +342,9 @@ public class DataBaseManager {
     /// </summary>
     /// <param name="sensorId"></param>
     /// /// <param name="matrix"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The successfulness of storing sensor information.
+    /// </returns>
     public int SetSensorMatrixById(int timestamp, int sensorId, int[,] matrix)
     {
         SqlEncap sql = new SqlEncap();
@@ -386,7 +402,9 @@ public class DataBaseManager {
     /// return the sensor according to id
     /// </summary>
     /// <param name="sensorId"></param>
-    /// <returns></returns>
+    /// <returns>
+    /// The 2D array of the sensor's information.
+    /// </returns>
     public int[,] GetSensorMatrixById(int sensorId, int timestamp)
     {
         SqlEncap sql = new SqlEncap();
@@ -420,6 +438,9 @@ public class DataBaseManager {
     }
     #endregion
 
+    /// <summary>
+    /// Provide a way to generate unique id.
+    /// </summary>
     public int provideUid()
     {
         var now = DateTime.Now;
@@ -468,6 +489,9 @@ public class DataBaseManager {
         return dataReader;
     }
 
+    /// <summary>
+    /// For demo reason, show all maze records.
+    /// </summary>
     public string[][] GetAllMazeRecord()
     {
         SqlEncap sql = new SqlEncap();
